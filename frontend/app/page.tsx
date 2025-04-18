@@ -2,20 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import SimpleDalGauge from './components/SimpleDalGauge';
-import { fetchDalStats } from './services/api';
-
-interface DALStats {
-  timestamp: string;
-  cycle: number;
-  total_bakers: number;
-  dal_active_bakers: number;
-  dal_inactive_bakers: number;
-  unclassified_bakers: number;
-  non_attesting_bakers: number;
-  dal_baking_power_percentage: number;
-  total_baking_power: number;
-  dal_baking_power: number;
-}
+import { fetchDalStats, DALStats } from './services/api';
 
 export default function Home() {
   // État pour stocker les données DAL
@@ -47,6 +34,19 @@ export default function Home() {
     // Nettoyer l'intervalle lors du démontage du composant
     return () => clearInterval(intervalId);
   }, []);
+
+  // Calcul des pourcentages avec protection contre les divisions par zéro
+  const calculateParticipationPercentage = () => {
+    if (!stats) return 0;
+    const nonAttestingCount = stats.total_bakers - stats.non_attesting_bakers;
+    if (nonAttestingCount <= 0) return 0;
+    return (stats.dal_active_bakers / nonAttestingCount) * 100;
+  };
+
+  const calculateAdoptionPercentage = () => {
+    if (!stats || stats.total_bakers <= 0) return 0;
+    return ((stats.total_bakers - stats.dal_inactive_bakers - stats.unclassified_bakers - stats.non_attesting_bakers) / stats.total_bakers) * 100;
+  };
 
   // Afficher un message de chargement
   if (loading && !stats) {
@@ -81,6 +81,9 @@ export default function Home() {
       </div>
     );
   }
+
+  const participationPercentage = calculateParticipationPercentage();
+  const adoptionPercentage = calculateAdoptionPercentage();
 
   return (
     <div style={{
@@ -121,19 +124,19 @@ export default function Home() {
           />
           <SimpleDalGauge
             value={stats?.dal_baking_power_percentage || 0}
-            label={`${stats?.dal_baking_power_percentage.toFixed(1) || 0}%`}
+            label={`${stats?.dal_baking_power_percentage?.toFixed(1) || '0'}%`}
             description="Baking Power"
             maxValue={100}
           />
           <SimpleDalGauge
-            value={(stats ? (stats.dal_active_bakers / (stats.total_bakers - stats.non_attesting_bakers) * 100) : 0)}
-            label={`${stats ? (stats.dal_active_bakers / (stats.total_bakers - stats.non_attesting_bakers) * 100).toFixed(1) : 0}%`}
+            value={participationPercentage}
+            label={`${participationPercentage.toFixed(1)}%`}
             description="DAL Participation"
             maxValue={100}
           />
           <SimpleDalGauge
-            value={(stats ? ((stats.total_bakers - stats.dal_inactive_bakers - stats.unclassified_bakers - stats.non_attesting_bakers) / stats.total_bakers * 100) : 0)}
-            label={`${stats ? ((stats.total_bakers - stats.dal_inactive_bakers - stats.unclassified_bakers - stats.non_attesting_bakers) / stats.total_bakers * 100).toFixed(1) : 0}%`}
+            value={adoptionPercentage}
+            label={`${adoptionPercentage.toFixed(1)}%`}
             description="DAL Adoption"
             maxValue={100}
           />

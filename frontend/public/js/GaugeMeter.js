@@ -1,24 +1,19 @@
 /*
  * AshAlom Gauge Meter.  Version 2.0.0
  * Copyright AshAlom.com  All rights reserved.
- * https://github.com/AshAlom/GaugeMeter <- Deleted!
- * https://github.com/githubsrinath/GaugeMeter <- Backup original.
- *
- * Original created by Dr Ash Alom
- *
- * This is a bug fixed and modified version of the AshAlom Gauge Meter.
- * Copyright 2023 Michael Wolf (Mictronics)
- * https://github.com/mictronics/GaugeMeter
- *
+ * https://github.com/AshAlom/GaugeMeter/
+ * Licensed under the MIT license
+ * Date: 2018-02-27T32:47:12.356Z
+ * Contacted AshAlom.com 2018-02-27
+ * Created by Dr Ash Alom
  */
-!(function ($) {
+(function ($) {
   $.fn.gaugeMeter = function (t) {
-    var defaults = $.extend(
+    var settings = $.extend(
       {
         id: '',
         percent: 0,
         used: null,
-        min: null,
         total: null,
         size: 100,
         prepend: '',
@@ -43,188 +38,67 @@
     );
     return this.each(function () {
       function getThemeColor(e) {
-        if (
-          option.color !== '' &&
-          option.color !== null &&
-          option.color !== undefined
-        ) {
-          return option.color;
-        }
         var t = '#2C94E0';
-        return (
-          e || (e = 1e-14),
-          'Red-Gold-Green' === option.theme &&
-            (e > 0 && (t = '#d90000'),
-            e > 10 && (t = '#e32100'),
-            e > 20 && (t = '#f35100'),
-            e > 30 && (t = '#ff8700'),
-            e > 40 && (t = '#ffb800'),
-            e > 50 && (t = '#ffd900'),
-            e > 60 && (t = '#dcd800'),
-            e > 70 && (t = '#a6d900'),
-            e > 80 && (t = '#69d900'),
-            e > 90 && (t = '#32d900')),
-          'Green-Gold-Red' === option.theme &&
-            (e > 0 && (t = '#32d900'),
-            e > 10 && (t = '#69d900'),
-            e > 20 && (t = '#a6d900'),
-            e > 30 && (t = '#dcd800'),
-            e > 40 && (t = '#ffd900'),
-            e > 50 && (t = '#ffb800'),
-            e > 60 && (t = '#ff8700'),
-            e > 70 && (t = '#f35100'),
-            e > 80 && (t = '#e32100'),
-            e > 90 && (t = '#d90000')),
-          'Green-Red' === option.theme &&
-            (e > 0 && (t = '#32d900'),
-            e > 10 && (t = '#41c900'),
-            e > 20 && (t = '#56b300'),
-            e > 30 && (t = '#6f9900'),
-            e > 40 && (t = '#8a7b00'),
-            e > 50 && (t = '#a75e00'),
-            e > 60 && (t = '#c24000'),
-            e > 70 && (t = '#db2600'),
-            e > 80 && (t = '#f01000'),
-            e > 90 && (t = '#ff0000')),
-          'Red-Green' === option.theme &&
-            (e > 0 && (t = '#ff0000'),
-            e > 10 && (t = '#f01000'),
-            e > 20 && (t = '#db2600'),
-            e > 30 && (t = '#c24000'),
-            e > 40 && (t = '#a75e00'),
-            e > 50 && (t = '#8a7b00'),
-            e > 60 && (t = '#6f9900'),
-            e > 70 && (t = '#56b300'),
-            e > 80 && (t = '#41c900'),
-            e > 90 && (t = '#32d900')),
-          'DarkBlue-LightBlue' === option.theme &&
-            (e > 0 && (t = '#2c94e0'),
-            e > 10 && (t = '#2b96e1'),
-            e > 20 && (t = '#2b99e4'),
-            e > 30 && (t = '#2a9ce7'),
-            e > 40 && (t = '#28a0e9'),
-            e > 50 && (t = '#26a4ed'),
-            e > 60 && (t = '#25a8f0'),
-            e > 70 && (t = '#24acf3'),
-            e > 80 && (t = '#23aff5'),
-            e > 90 && (t = '#21b2f7')),
-          'LightBlue-DarkBlue' === option.theme &&
-            (e > 0 && (t = '#21b2f7'),
-            e > 10 && (t = '#23aff5'),
-            e > 20 && (t = '#24acf3'),
-            e > 30 && (t = '#25a8f0'),
-            e > 40 && (t = '#26a4ed'),
-            e > 50 && (t = '#28a0e9'),
-            e > 60 && (t = '#2a9ce7'),
-            e > 70 && (t = '#2b99e4'),
-            e > 80 && (t = '#2b96e1'),
-            e > 90 && (t = '#2c94e0')),
-          'DarkRed-LightRed' === option.theme &&
-            (e > 0 && (t = '#d90000'),
-            e > 10 && (t = '#dc0000'),
-            e > 20 && (t = '#e00000'),
-            e > 30 && (t = '#e40000'),
-            e > 40 && (t = '#ea0000'),
-            e > 50 && (t = '#ee0000'),
-            e > 60 && (t = '#f30000'),
-            e > 70 && (t = '#f90000'),
-            e > 80 && (t = '#fc0000'),
-            e > 90 && (t = '#ff0000')),
-          'LightRed-DarkRed' === option.theme &&
-            (e > 0 && (t = '#ff0000'),
-            e > 10 && (t = '#fc0000'),
-            e > 20 && (t = '#f90000'),
-            e > 30 && (t = '#f30000'),
-            e > 40 && (t = '#ee0000'),
-            e > 50 && (t = '#ea0000'),
-            e > 60 && (t = '#e40000'),
-            e > 70 && (t = '#e00000'),
-            e > 80 && (t = '#dc0000'),
-            e > 90 && (t = '#d90000')),
-          'DarkGreen-LightGreen' === option.theme &&
-            (e > 0 && (t = '#32d900'),
-            e > 10 && (t = '#33db00'),
-            e > 20 && (t = '#34df00'),
-            e > 30 && (t = '#34e200'),
-            e > 40 && (t = '#36e700'),
-            e > 50 && (t = '#37ec00'),
-            e > 60 && (t = '#38f100'),
-            e > 70 && (t = '#38f600'),
-            e > 80 && (t = '#39f900'),
-            e > 90 && (t = '#3afc00')),
-          'LightGreen-DarkGreen' === option.theme &&
-            (e > 0 && (t = '#3afc00'),
-            e > 10 && (t = '#39f900'),
-            e > 20 && (t = '#38f600'),
-            e > 30 && (t = '#38f100'),
-            e > 40 && (t = '#37ec00'),
-            e > 50 && (t = '#36e700'),
-            e > 60 && (t = '#34e200'),
-            e > 70 && (t = '#34df00'),
-            e > 80 && (t = '#33db00'),
-            e > 90 && (t = '#32d900')),
-          'DarkGold-LightGold' === option.theme &&
-            (e > 0 && (t = '#ffb800'),
-            e > 10 && (t = '#ffba00'),
-            e > 20 && (t = '#ffbd00'),
-            e > 30 && (t = '#ffc200'),
-            e > 40 && (t = '#ffc600'),
-            e > 50 && (t = '#ffcb00'),
-            e > 60 && (t = '#ffcf00'),
-            e > 70 && (t = '#ffd400'),
-            e > 80 && (t = '#ffd600'),
-            e > 90 && (t = '#ffd900')),
-          'LightGold-DarkGold' === option.theme &&
-            (e > 0 && (t = '#ffd900'),
-            e > 10 && (t = '#ffd600'),
-            e > 20 && (t = '#ffd400'),
-            e > 30 && (t = '#ffcf00'),
-            e > 40 && (t = '#ffcb00'),
-            e > 50 && (t = '#ffc600'),
-            e > 60 && (t = '#ffc200'),
-            e > 70 && (t = '#ffbd00'),
-            e > 80 && (t = '#ffba00'),
-            e > 90 && (t = '#ffb800')),
-          'White' === option.theme && (t = '#fff'),
-          'Black' === option.theme && (t = '#000'),
-          t
-        );
+        return e || (e = 1e-14),
+          'Red-Gold-Green' === settings.theme && (t = e > 90 ? '#FF4500' : e > 40 ? '#f9c802' : '#a9d70b'),
+          'Green-Gold-Red' === settings.theme && (t = e > 90 ? '#a9d70b' : e > 40 ? '#f9c802' : '#FF4500'),
+          'Green-Red' === settings.theme && (t = e > 50 ? '#a9d70b' : '#FF4500'),
+          'Red-Green' === settings.theme && (t = e > 50 ? '#FF4500' : '#a9d70b'),
+          'DarkBlue-LightBlue' === settings.theme && (t = e > 50 ? '#1A5AAE' : '#2C94E0'),
+          'LightBlue-DarkBlue' === settings.theme && (t = e > 50 ? '#2C94E0' : '#1A5AAE'),
+          'DarkRed-LightRed' === settings.theme && (t = e > 50 ? '#B22222' : '#FF4500'),
+          'LightRed-DarkRed' === settings.theme && (t = e > 50 ? '#FF4500' : '#B22222'),
+          'Blue' === settings.theme && (t = '#3B82F6'),
+          'Sky' === settings.theme && (t = '#00BFFF'),
+          t;
       }
       /* The label below gauge. */
       function createLabel(t, a) {
-        if (t.children('b').length === 0) {
-          $('<b></b>')
-            .appendTo(t)
-            .html(option.label)
-            .css({
-              'line-height': option.size + 5 * a + 'px',
-              color: option.label_color
-            });
+        if (settings.showvalue) {
+          t = Math.ceil(t / 100 * a);
         }
+        var n = Math.ceil(a * settings.size),
+          l = Math.ceil(settings.size * settings.text_size),
+          r = settings.prepend + t + settings.append;
+        $('<div></div>')
+          .addClass('gaugeMeter-label')
+          .text(r)
+          .css({
+            color: settings.label_color,
+            'font-size': l + 'px',
+            'font-weight': 'bold',
+            'font-family': 'Arial, sans-serif',
+            'position': 'absolute',
+            'top': '50%',
+            'left': '50%',
+            'transform': 'translate(-50%, -50%)',
+            'z-index': 1000
+          })
+          .appendTo($('div', this));
       }
       /* Prepend and append text, the gauge text or percentage value. */
       function createSpanTag(t) {
         var fgcolor = '';
-        if (option.animate_text_colors === true) {
-          fgcolor = option.fgcolor;
+        if (settings.animate_text_colors === true) {
+          fgcolor = settings.fgcolor;
         }
         var child = t.children('span');
         if (child.length !== 0) {
           child.html(r).css({ color: fgcolor });
           return;
         }
-        if (option.text_size <= 0.0 || Number.isNaN(option.text_size)) {
-          option.text_size = 0.22;
+        if (settings.text_size <= 0.0 || Number.isNaN(settings.text_size)) {
+          settings.text_size = 0.22;
         }
-        if (option.text_size > 0.5) {
-          option.text_size = 0.5;
+        if (settings.text_size > 0.5) {
+          settings.text_size = 0.5;
         }
         $('<span></span>')
           .appendTo(t)
           .html(r)
           .css({
-            'line-height': option.size + 'px',
-            'font-size': option.text_size * option.size + 'px',
+            'line-height': settings.size + 'px',
+            'font-size': settings.text_size * settings.size + 'px',
             color: fgcolor
           });
       }
@@ -232,13 +106,13 @@
       function getDataAttr(t) {
         $.each(dataAttr, function (index, element) {
           if (t.data(element) !== undefined && t.data(element) !== null) {
-            option[element] = t.data(element);
+            settings[element] = t.data(element);
           } else {
-            option[element] = $(defaults).attr(element);
+            settings[element] = $(defaults).attr(element);
           }
 
           if (element === 'fill') {
-            s = option[element];
+            s = settings[element];
           }
 
           if (
@@ -246,60 +120,60 @@
               element === 'width' ||
               element === 'animationstep' ||
               element === 'stripe') &&
-            !Number.isInteger(option[element])
+            !Number.isInteger(settings[element])
           ) {
-            option[element] = parseInt(option[element]);
+            settings[element] = parseInt(settings[element]);
           }
 
           if (element === 'text_size') {
-            option[element] = parseFloat(option[element]);
+            settings[element] = parseFloat(settings[element]);
           }
         });
       }
       /* Draws the gauge. */
       function drawGauge(a) {
-        if (option.animate_gauge_colors) {
+        if (settings.animate_gauge_colors) {
           // Set gauge color for each value change.
-          option.fgcolor = getThemeColor(a * 100);
+          settings.fgcolor = getThemeColor(a * 100);
         }
         if (M < 0) M = 0;
         if (M > 100) M = 100;
         var lw =
-          option.width < 1 || isNaN(option.width)
-            ? option.size / 20
-            : option.width;
+          settings.width < 1 || isNaN(settings.width)
+            ? settings.size / 20
+            : settings.width;
         g.clearRect(0, 0, b.width, b.height);
         g.beginPath();
         g.arc(m, v, x, G, k, !1);
         if (s) {
-          g.fillStyle = option.fill;
+          g.fillStyle = settings.fill;
           g.fill();
         }
         g.lineWidth = lw;
-        g.strokeStyle = option.back;
-        option.stripe > parseInt(0)
-          ? g.setLineDash([option.stripe], 1)
+        g.strokeStyle = settings.back;
+        settings.stripe > parseInt(0)
+          ? g.setLineDash([settings.stripe], 1)
           : (g.lineCap = 'round');
         g.stroke();
         g.beginPath();
         g.arc(m, v, x, -I, P * a - I, !1);
         g.lineWidth = lw;
-        g.strokeStyle = option.fgcolor;
+        g.strokeStyle = settings.fgcolor;
         g.stroke();
         c > M &&
           ((M += z),
-          requestAnimationFrame(function () {
-            drawGauge(Math.min(M, c) / 100);
-            if (option.animate_text_colors) {
-              // Set text color for each value change.
-              $(p).find('span').css({ color: option.fgcolor });
-            }
-            if (defaults.showvalue === true || option.showvalue === true) {
-              $(p).find('output').text(option.used);
-            } else {
-              $(p).find('output').text(M);
-            }
-          }, p));
+            requestAnimationFrame(function () {
+              drawGauge(Math.min(M, c) / 100);
+              if (settings.animate_text_colors) {
+                // Set text color for each value change.
+                $(p).find('span').css({ color: settings.fgcolor });
+              }
+              if (defaults.showvalue === true || settings.showvalue === true) {
+                $(p).find('output').text(settings.used);
+              } else {
+                $(p).find('output').text(M);
+              }
+            }, p));
       }
 
       $(this).attr('data-id', $(this).attr('id'));
@@ -328,24 +202,23 @@
           'fill',
           'showvalue'
         ],
-        option = {},
         c = 0,
         p = $(this),
         s = false;
       p.addClass('gaugeMeter');
       getDataAttr(p);
 
-      if (Number.isInteger(option.used) && Number.isInteger(option.total)) {
-        var u = option.used;
-        var t = option.total;
-        if (Number.isInteger(option.min)) {
-          t -= option.min;
-          u -= option.min;
+      if (Number.isInteger(settings.used) && Number.isInteger(settings.total)) {
+        var u = settings.used;
+        var t = settings.total;
+        if (Number.isInteger(settings.min)) {
+          t -= settings.min;
+          u -= settings.min;
         }
         c = u / (t / 100);
       } else {
-        if (Number.isInteger(option.percent)) {
-          c = option.percent;
+        if (Number.isInteger(settings.percent)) {
+          c = settings.percent;
         } else {
           c = parseInt(defaults.percent);
         }
@@ -354,73 +227,73 @@
       if (c > 100) c = 100;
 
       if (
-        option.text !== '' &&
-        option.text !== null &&
-        option.text !== undefined
+        settings.text !== '' &&
+        settings.text !== null &&
+        settings.text !== undefined
       ) {
         if (
-          option.append !== '' &&
-          option.append !== null &&
-          option.append !== undefined
+          settings.append !== '' &&
+          settings.append !== null &&
+          settings.append !== undefined
         ) {
-          r = option.text + '<u>' + option.append + '</u>';
+          r = settings.text + '<u>' + settings.append + '</u>';
         } else {
-          r = option.text;
+          r = settings.text;
         }
         if (
-          option.prepend !== '' &&
-          option.prepend !== null &&
-          option.prepend !== undefined
+          settings.prepend !== '' &&
+          settings.prepend !== null &&
+          settings.prepend !== undefined
         ) {
-          r = '<s>' + option.prepend + '</s>' + r;
+          r = '<s>' + settings.prepend + '</s>' + r;
         }
       } else {
-        if (defaults.showvalue === true || option.showvalue === true) {
-          r = '<output>' + option.used + '</output>';
+        if (defaults.showvalue === true || settings.showvalue === true) {
+          r = '<output>' + settings.used + '</output>';
         } else {
           r = '<output>' + c.toString() + '</output>';
         }
         if (
-          option.prepend !== '' &&
-          option.prepend !== null &&
-          option.prepend !== undefined
+          settings.prepend !== '' &&
+          settings.prepend !== null &&
+          settings.prepend !== undefined
         ) {
-          r = '<s>' + option.prepend + '</s>' + r;
+          r = '<s>' + settings.prepend + '</s>' + r;
         }
 
         if (
-          option.append !== '' &&
-          option.append !== null &&
-          option.append !== undefined
+          settings.append !== '' &&
+          settings.append !== null &&
+          settings.append !== undefined
         ) {
-          r = r + '<u>' + option.append + '</u>';
+          r = r + '<u>' + settings.append + '</u>';
         }
       }
 
-      option.fgcolor = getThemeColor(c);
+      settings.fgcolor = getThemeColor(c);
       createSpanTag(p);
 
       if (
-        option.style !== '' &&
-        option.style !== null &&
-        option.style !== undefined
+        settings.style !== '' &&
+        settings.style !== null &&
+        settings.style !== undefined
       ) {
-        createLabel(p, option.size / 13);
+        createLabel(settings.text || settings.percent, settings.size / 13);
       }
 
-      $(this).width(option.size + 'px');
+      $(this).width(settings.size + 'px');
 
       var b = $('<canvas></canvas>')
-          .attr({ width: option.size, height: option.size })
-          .get(0),
+        .attr({ width: settings.size, height: settings.size })
+        .get(0),
         g = b.getContext('2d'),
         m = b.width / 2,
         v = b.height / 2,
-        x = (360 * option.percent * (Math.PI / 180), b.width / 2.5),
+        x = (360 * settings.percent * (Math.PI / 180), b.width / 2.5),
         k = 2.3 * Math.PI,
         G = 0,
-        M = 0 === option.animationstep ? c : 0,
-        z = Math.max(option.animationstep, 0),
+        M = 0 === settings.animationstep ? c : 0,
+        z = Math.max(settings.animationstep, 0),
         P = 2 * Math.PI,
         I = Math.PI / 2;
       var child = $(this).children('canvas');
@@ -432,12 +305,12 @@
         $(b).appendTo($(this));
       }
 
-      if ('Semi' === option.style) {
+      if ('Semi' === settings.style) {
         k = 2 * Math.PI;
         G = 3.13;
         P = 1 * Math.PI;
         I = Math.PI / 0.996;
-      } else if ('Arch' === option.style) {
+      } else if ('Arch' === settings.style) {
         k = 2.195 * Math.PI;
         G = 655.99999;
         P = 1.4 * Math.PI;
