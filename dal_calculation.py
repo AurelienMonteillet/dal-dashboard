@@ -6,6 +6,7 @@ import requests
 import logging
 import argparse
 import time
+import os
 from typing import Dict, Optional
 from datetime import datetime
 from pathlib import Path
@@ -22,7 +23,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Define the path for storing results
-RESULTS_FILE = Path("/opt/dal_dashboard/data/dal_stats.json")
+DATA_DIR = Path("/opt/dal_dashboard/data")
+DOCS_DIR = Path("/opt/dal_dashboard/docs")
+RESULTS_FILE_DATA = DATA_DIR / "dal_stats.json"
+RESULTS_FILE_DOCS = DOCS_DIR / "dal_stats.json"
 
 class DALCalculator:
     def __init__(self, network: str = "mainnet"):
@@ -132,9 +136,14 @@ class DALCalculator:
             "dal_baking_power": dal_stake
         }
 
-        # Save results to file
-        RESULTS_FILE.parent.mkdir(parents=True, exist_ok=True)
-        with open(RESULTS_FILE, 'w') as f:
+        # Save results to data directory
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+        with open(RESULTS_FILE_DATA, 'w') as f:
+            json.dump(results, f, indent=2)
+        
+        # Save results to docs directory for GitHub Pages
+        DOCS_DIR.mkdir(parents=True, exist_ok=True)
+        with open(RESULTS_FILE_DOCS, 'w') as f:
             json.dump(results, f, indent=2)
 
         # Log results
@@ -145,7 +154,7 @@ class DALCalculator:
         logger.info(f"{non_attesting} bakers sent no attestations.")
         logger.info(f"DAL users represent {100 * dal_active/(dal_active + dal_inactive + unclassified + non_attesting):.2f}% of the total bakers.")
         logger.info(f"DAL users represent {dal_stake/1e6:.1f}M ꜩ / {total_stake/1e6:.1f}M = {100 * dal_stake/total_stake:.2f}% of the baking power.")
-        logger.info(f"Results saved to {RESULTS_FILE}")
+        logger.info(f"Results saved to {RESULTS_FILE_DATA} and {RESULTS_FILE_DOCS}")
 
 def main():
     parser = argparse.ArgumentParser(description='Calculate DAL statistics for Tezos network')

@@ -23,8 +23,8 @@ This project uses a serverless approach:
 ### Data Flow
 1. A cron job runs `dal_calculation.py` every 2 days
 2. The script collects data from Tezos blockchain using TzKT API
-3. Statistics are calculated and saved to a JSON file
-4. The JSON file is automatically pushed to GitHub
+3. Statistics are calculated and saved to both `data/` directory and `docs/` directory
+4. The JSON file in `docs/` is automatically pushed to GitHub
 5. GitHub Pages serves the static JSON file
 6. The Next.js frontend fetches and visualizes the data
 
@@ -77,7 +77,7 @@ cp .env.example .env
 ```bash
 python dal_calculation.py --network mainnet
 ```
-This creates a JSON file in the `data/` directory.
+This creates JSON files in both the `data/` and `docs/` directories.
 
 ### Start the frontend:
 ```bash
@@ -93,8 +93,9 @@ Access the dashboard in your browser at: http://localhost:3000
 
 The project is configured to:
 1. Generate DAL statistics every 2 days via a cron job
-2. Push the updated data to GitHub
-3. Serve the data via GitHub Pages at:
+2. Save the data directly to both `data/` and `docs/` directories
+3. Push the updated data to GitHub
+4. Serve the data via GitHub Pages at:
    https://aurelienmonteillet.github.io/dal-dashboard/dal_stats.json
 
 To set up the cron job on your server:
@@ -103,8 +104,10 @@ crontab -e
 ```
 Add:
 ```
-0 0 */2 * * cd /opt/dal_dashboard && source venv/bin/activate && python dal_calculation.py --network mainnet && cp data/dal_stats.json docs/ && git add docs/dal_stats.json && git commit -m "Update DAL stats $(date +\%Y-\%m-\%d)" && git push origin main >> logs/dal_update.log 2>&1
+0 0 */2 * * cd /opt/dal_dashboard && source venv/bin/activate && python dal_calculation.py --network mainnet && git add docs/dal_stats.json && git commit -m "Update DAL stats $(date +\%Y-\%m-\%d)" && git push origin main >> logs/dal_update.log 2>&1
 ```
+
+Note: The script now saves directly to the `docs/` directory, so no manual copying is needed.
 
 ### Frontend Deployment
 
