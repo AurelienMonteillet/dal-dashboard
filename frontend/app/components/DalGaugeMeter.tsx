@@ -7,6 +7,10 @@ declare global {
     interface JQuery {
         gaugeMeter: (options?: any) => JQuery;
     }
+
+    interface Window {
+        jQuery: any;
+    }
 }
 
 interface DalGaugeMeterProps {
@@ -21,9 +25,9 @@ const DalGaugeMeter: React.FC<DalGaugeMeterProps> = ({ value, label, maxValue = 
 
     useEffect(() => {
         // Vérifier si jQuery et GaugeMeter sont disponibles
-        if (typeof window !== 'undefined' && window.jQuery && (window.jQuery as any).fn.gaugeMeter) {
+        if (typeof window !== 'undefined' && window.jQuery && window.jQuery.fn.gaugeMeter) {
             // Initialiser la jauge
-            (window.jQuery as any)(`#${gaugeId.current}`).gaugeMeter({
+            window.jQuery(`#${gaugeId.current}`).gaugeMeter({
                 percent: percentage,
                 text: label,
                 size: 60,
@@ -38,8 +42,8 @@ const DalGaugeMeter: React.FC<DalGaugeMeterProps> = ({ value, label, maxValue = 
 
     // Mettre à jour la jauge si la valeur change
     useEffect(() => {
-        if (typeof window !== 'undefined' && window.jQuery && (window.jQuery as any).fn.gaugeMeter) {
-            (window.jQuery as any)(`#${gaugeId.current}`).gaugeMeter({
+        if (typeof window !== 'undefined' && window.jQuery && window.jQuery.fn.gaugeMeter) {
+            window.jQuery(`#${gaugeId.current}`).gaugeMeter({
                 percent: percentage
             });
         }

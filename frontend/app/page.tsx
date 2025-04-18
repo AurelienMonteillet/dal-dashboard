@@ -1,16 +1,86 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import SimpleDalGauge from './components/SimpleDalGauge';
+import { fetchDalStats } from './services/api';
+
+interface DALStats {
+  timestamp: string;
+  cycle: number;
+  total_bakers: number;
+  dal_active_bakers: number;
+  dal_inactive_bakers: number;
+  unclassified_bakers: number;
+  non_attesting_bakers: number;
+  dal_baking_power_percentage: number;
+  total_baking_power: number;
+  dal_baking_power: number;
+}
 
 export default function Home() {
-  // Test data - to be replaced with real data later
-  const mockData = {
-    cycle: 852,
-    total_bakers: 289,
-    dal_active_bakers: 62,
-    dal_baking_power_percentage: 28.1
-  };
+  // État pour stocker les données DAL
+  const [stats, setStats] = useState<DALStats | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Récupérer les données au chargement de la page
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true);
+        const data = await fetchDalStats();
+        setStats(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error loading DAL stats:', err);
+        setError('Impossible de charger les statistiques DAL');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadData();
+
+    // Rafraîchir les données toutes les heures
+    const intervalId = setInterval(loadData, 60 * 60 * 1000);
+
+    // Nettoyer l'intervalle lors du démontage du composant
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // Afficher un message de chargement
+  if (loading && !stats) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        backgroundColor: 'black',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white',
+        fontSize: '24px'
+      }}>
+        Loading DAL statistics...
+      </div>
+    );
+  }
+
+  // Afficher un message d'erreur
+  if (error) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        backgroundColor: 'black',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'red',
+        fontSize: '24px'
+      }}>
+        Error: {error}
+      </div>
+    );
+  }
 
   return (
     <div style={{
@@ -28,7 +98,7 @@ export default function Home() {
         color: 'white',
         marginTop: '2rem'
       }}>
-        Tezos mainnet DAL-o-meter: cycle {mockData.cycle}
+        Tezos mainnet DAL-o-meter: cycle {stats?.cycle || '...'}
       </h1>
 
       <div style={{
@@ -44,27 +114,27 @@ export default function Home() {
           width: '100%'
         }}>
           <SimpleDalGauge
-            value={mockData.dal_active_bakers}
-            label={`${mockData.dal_active_bakers}/${mockData.total_bakers}`}
+            value={stats?.dal_active_bakers || 0}
+            label={`${stats?.dal_active_bakers || 0}/${stats?.total_bakers || 0}`}
             description="DAL Active Bakers"
-            maxValue={mockData.total_bakers}
+            maxValue={stats?.total_bakers || 100}
           />
           <SimpleDalGauge
-            value={mockData.dal_baking_power_percentage}
-            label={`${mockData.dal_baking_power_percentage}%`}
+            value={stats?.dal_baking_power_percentage || 0}
+            label={`${stats?.dal_baking_power_percentage.toFixed(1) || 0}%`}
             description="Baking Power"
             maxValue={100}
           />
           <SimpleDalGauge
-            value={65}
-            label="65%"
-            description="DAL Attestations"
+            value={(stats ? (stats.dal_active_bakers / (stats.total_bakers - stats.non_attesting_bakers) * 100) : 0)}
+            label={`${stats ? (stats.dal_active_bakers / (stats.total_bakers - stats.non_attesting_bakers) * 100).toFixed(1) : 0}%`}
+            description="DAL Participation"
             maxValue={100}
           />
           <SimpleDalGauge
-            value={42}
-            label="42%"
-            description="DAL Participation"
+            value={(stats ? ((stats.total_bakers - stats.dal_inactive_bakers - stats.unclassified_bakers - stats.non_attesting_bakers) / stats.total_bakers * 100) : 0)}
+            label={`${stats ? ((stats.total_bakers - stats.dal_inactive_bakers - stats.unclassified_bakers - stats.non_attesting_bakers) / stats.total_bakers * 100).toFixed(1) : 0}%`}
+            description="DAL Adoption"
             maxValue={100}
           />
         </div>
