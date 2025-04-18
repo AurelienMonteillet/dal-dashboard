@@ -8,16 +8,34 @@ This dashboard allows real-time visualization of the adoption statistics of the 
 - Number of bakers who have activated/deactivated DAL
 - Percentage of total bakers using DAL
 - Percentage of baking power represented by DAL users
-- Automatic data updates
+- Automatic data updates every 2 days
 - Modern and responsive user interface
+
+## Project Architecture
+
+### Simplified Architecture
+This project uses a serverless approach:
+- A Python script collects and calculates DAL statistics every 2 days
+- The data is stored as a static JSON file hosted on GitHub Pages
+- A Next.js frontend fetches and displays this data
+- No permanent backend is needed
+
+### Data Flow
+1. A cron job runs `dal_calculation.py` every 2 days
+2. The script collects data from Tezos blockchain using TzKT API
+3. Statistics are calculated and saved to a JSON file
+4. The JSON file is automatically pushed to GitHub
+5. GitHub Pages serves the static JSON file
+6. The Next.js frontend fetches and visualizes the data
 
 ## Prerequisites
 
 - Python 3.8+
 - Node.js 16+
 - npm or yarn
+- Git
 
-## Installation
+## Local Development Setup
 
 1. Clone the repository:
 ```bash
@@ -53,58 +71,57 @@ cp .env.example .env
 
 2. Modify environment variables if necessary in the `.env` file
 
-## Launching the Application
+## Running Locally
 
-1. Start the backend:
+### Generate DAL Statistics
 ```bash
-uvicorn app.main:app --reload
+python dal_calculation.py --network mainnet
 ```
+This creates a JSON file in the `data/` directory.
 
-2. In another terminal, start the frontend:
+### Start the frontend:
 ```bash
 cd frontend
 npm run dev
 ```
 
-3. Access the dashboard in your browser at: http://localhost:3000
+Access the dashboard in your browser at: http://localhost:3000
 
-## Architecture
+## Deployment
 
-### Backend
-- `app/` : FastAPI backend code
-  - `main.py` : Application entry point and API endpoints
-  - `dal_calculator.py` : Module for calculating DAL statistics
-  - `scheduler.py` : Manager for periodic updates
-  
-### Frontend
-- `frontend/` : Next.js application (React framework)
-  - `app/` : Application components and pages
-  - `public/` : Static assets
-  - `src/types/` : TypeScript type definitions
-  
-### Data Flow
-1. The Python script `dal_calculation.py` collects data from the Tezos blockchain using the TzKT API
-2. The statistics are calculated and stored in JSON format
-3. The FastAPI backend provides these statistics through RESTful endpoints
-4. The Next.js frontend fetches and displays the data using React components
+### Data Generation & GitHub Pages
 
-### Components
-- `SimpleDalGauge`: A custom gauge component to visually display percentages and statistics
-- Main dashboard page: Aggregates multiple gauges to provide an overview of DAL adoption
+The project is configured to:
+1. Generate DAL statistics every 2 days via a cron job
+2. Push the updated data to GitHub
+3. Serve the data via GitHub Pages at:
+   https://aurelienmonteillet.github.io/dal-dashboard/dal_stats.json
 
-## Data Updates
+To set up the cron job on your server:
+```bash
+crontab -e
+```
+Add:
+```
+0 0 */2 * * cd /opt/dal_dashboard && source venv/bin/activate && python dal_calculation.py --network mainnet && cp data/dal_stats.json docs/ && git add docs/dal_stats.json && git commit -m "Update DAL stats $(date +\%Y-\%m-\%d)" && git push origin main >> logs/dal_update.log 2>&1
+```
 
-The application automatically updates data through:
-- A cron job configured in `crontab_setup.sh`
-- Data is stored in the `data/` directory
-- Logs are available in the `logs/` directory
+### Frontend Deployment
 
-## Optimizations
+The frontend is deployed on Vercel:
+1. Connect your GitHub repository to Vercel
+2. Configure it to use the `frontend` directory as the root
+3. Add the environment variable:
+   - `NEXT_PUBLIC_JSON_URL` = `https://aurelienmonteillet.github.io/dal-dashboard/dal_stats.json`
 
-- Data caching with configurable validity duration
-- Parallelized requests for TzKT API calls
-- Rate limiting for API requests
-- Configurable automatic updates (default every 5 minutes)
+## Project Structure
+
+- `dal_calculation.py`: Script that fetches and calculates DAL statistics
+- `data/`: Directory where generated JSON is stored locally
+- `docs/`: Directory for GitHub Pages (contains the published JSON)
+- `frontend/`: Next.js application
+  - `app/components/SimpleDalGauge.tsx`: Custom gauge component
+  - `app/page.tsx`: Main dashboard page
 
 ## Contributing
 
