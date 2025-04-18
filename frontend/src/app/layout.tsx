@@ -1,7 +1,9 @@
+'use client';
+
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import JQueryLoader from "./components/JQueryLoader";
+import Script from "next/script";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,8 +22,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <Script
+          src="https://code.jquery.com/jquery-3.7.1.min.js"
+          strategy="beforeInteractive"
+        />
+      </head>
       <body className={`${inter.className} antialiased`}>
-        <JQueryLoader />
         {children}
       </body>
     </html>

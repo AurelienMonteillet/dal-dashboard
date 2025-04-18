@@ -1,24 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tezos DAL-o-meter Frontend
 
-## Getting Started
+This is the frontend for the Tezos DAL-o-meter dashboard, built with Next.js.
 
-First, run the development server:
+## Project Structure
+
+The frontend is organized as follows:
+
+- `src/app/` - Main app directory (used for Vercel deployment)
+  - `page.tsx` - The main page component with the dashboard
+  - `layout.tsx` - The root layout component that includes jQuery
+  - `globals.css` - Global CSS styles
+  - `components/` - React components
+
+- `public/` - Static files
+  - `js/GaugeMeter.js` - Gauge library (currently not used)
+
+## Local Development
+
+To run the frontend locally:
 
 ```bash
+# Install dependencies
+npm install
+
+# Start the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The app will be available at http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment on Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This frontend is designed to be deployed on Vercel. When deploying:
+
+1. Connect your GitHub repository to Vercel
+2. Configure the build settings:
+   - Framework: Next.js
+   - Root directory: `frontend`
+   - Build Command: `npm run build`
+
+3. Add the following environment variable:
+   - `NEXT_PUBLIC_JSON_URL` = `https://aurelienmonteillet.github.io/dal-dashboard/dal_stats.json`
+
+## Data Source
+
+The dashboard fetches data from a static JSON file hosted on GitHub Pages. The data is updated by a cron job that runs every 2 days, calculating DAL statistics for the Tezos network.
 
 ## Learn More
 

@@ -1,103 +1,234 @@
-import Image from "next/image";
+'use client';
+
+import React, { useEffect, useState } from 'react';
+
+// Interface pour les statistiques DAL
+interface DALStats {
+  timestamp: string;
+  cycle: number;
+  total_bakers: number;
+  dal_active_bakers: number;
+  dal_inactive_bakers: number;
+  unclassified_bakers: number;
+  non_attesting_bakers: number;
+  dal_baking_power_percentage: number;
+  total_baking_power: number;
+  dal_baking_power: number;
+}
+
+// URL du fichier JSON hébergé sur GitHub Pages
+const JSON_URL = process.env.NEXT_PUBLIC_JSON_URL || 'https://aurelienmonteillet.github.io/dal-dashboard/dal_stats.json';
+
+/**
+ * Récupère les statistiques DAL depuis le JSON hébergé sur GitHub Pages
+ */
+async function fetchDalStats(): Promise<DALStats> {
+  try {
+    const response = await fetch(JSON_URL, {
+      // Nécessaire pour éviter la mise en cache de la réponse
+      cache: 'no-store',
+      next: { revalidate: 3600 } // Revalider toutes les heures
+    });
+
+    if (!response.ok) {
+      throw new Error(`Network response was not ok: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching DAL stats:', error);
+    throw error;
+  }
+}
+
+// Composant pour afficher une jauge simple
+const SimpleDalGauge: React.FC<{ value: number; label: string; description: string; maxValue?: number }> =
+  ({ value, label, description, maxValue = 100 }) => {
+    const percentage = Math.round((value / maxValue) * 100);
+
+    return (
+      <div style={{
+        width: '25%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        boxSizing: 'border-box',
+        padding: '0 10px'
+      }}>
+        <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+          <span style={{ color: 'white', fontSize: '20px', fontWeight: 'bold' }}>{label}</span>
+        </div>
+
+        {/* SVG gauge container */}
+        <svg width="150" height="90" viewBox="0 0 100 60">
+          {/* Gray background semi-circle */}
+          <path
+            d="M 10,50 A 40,40 0 0,1 90,50"
+            fill="none"
+            stroke="#2a2d34"
+            strokeWidth="8"
+            strokeLinecap="round"
+          />
+
+          {/* Blue segment showing progress */}
+          {percentage > 0 && (
+            <path
+              id="progressArc"
+              fill="none"
+              stroke="#3B82F6"
+              strokeWidth="8"
+              strokeDasharray={`${percentage * 1.26}, 126`}
+              strokeLinecap="round"
+              d="M 10,50 A 40,40 0 0,1 90,50"
+            />
+          )}
+        </svg>
+
+        <div style={{ textAlign: 'center', marginTop: '10px' }}>
+          <span style={{ color: 'white', fontSize: '14px', opacity: '0.8' }}>{description}</span>
+        </div>
+      </div>
+    );
+  };
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  // État pour stocker les données DAL
+  const [stats, setStats] = useState<DALStats | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  // Récupérer les données au chargement de la page
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true);
+        const data = await fetchDalStats();
+        setStats(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error loading DAL stats:', err);
+        setError('Impossible de charger les statistiques DAL');
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadData();
+
+    // Rafraîchir les données toutes les heures
+    const intervalId = setInterval(loadData, 60 * 60 * 1000);
+
+    // Nettoyer l'intervalle lors du démontage du composant
+    return () => clearInterval(intervalId);
+  }, []);
+
+  // Calcul des pourcentages avec protection contre les divisions par zéro
+  const calculateParticipationPercentage = () => {
+    if (!stats) return 0;
+    const nonAttestingCount = stats.total_bakers - stats.non_attesting_bakers;
+    if (nonAttestingCount <= 0) return 0;
+    return (stats.dal_active_bakers / nonAttestingCount) * 100;
+  };
+
+  const calculateAdoptionPercentage = () => {
+    if (!stats || stats.total_bakers <= 0) return 0;
+    return ((stats.total_bakers - stats.dal_inactive_bakers - stats.unclassified_bakers - stats.non_attesting_bakers) / stats.total_bakers) * 100;
+  };
+
+  // Afficher un message de chargement
+  if (loading && !stats) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        backgroundColor: 'black',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'white',
+        fontSize: '24px'
+      }}>
+        Loading DAL statistics...
+      </div>
+    );
+  }
+
+  // Afficher un message d'erreur
+  if (error) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        backgroundColor: 'black',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        color: 'red',
+        fontSize: '24px'
+      }}>
+        Error: {error}
+      </div>
+    );
+  }
+
+  const participationPercentage = calculateParticipationPercentage();
+  const adoptionPercentage = calculateAdoptionPercentage();
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: 'black',
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '2rem'
+    }}>
+      <h1 style={{
+        textAlign: 'center',
+        fontSize: '32px',
+        fontWeight: 'bold',
+        marginBottom: '4rem',
+        color: 'white',
+        marginTop: '2rem'
+      }}>
+        Tezos mainnet DAL-o-meter: cycle {stats?.cycle || '...'}
+      </h1>
+
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        paddingTop: '2rem'
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          width: '100%'
+        }}>
+          <SimpleDalGauge
+            value={stats?.dal_active_bakers || 0}
+            label={`${stats?.dal_active_bakers || 0}/${stats?.total_bakers || 0}`}
+            description="DAL Active Bakers"
+            maxValue={stats?.total_bakers || 100}
+          />
+          <SimpleDalGauge
+            value={stats?.dal_baking_power_percentage || 0}
+            label={`${stats?.dal_baking_power_percentage?.toFixed(1) || '0'}%`}
+            description="Baking Power"
+            maxValue={100}
+          />
+          <SimpleDalGauge
+            value={participationPercentage}
+            label={`${participationPercentage.toFixed(1)}%`}
+            description="DAL Participation"
+            maxValue={100}
+          />
+          <SimpleDalGauge
+            value={adoptionPercentage}
+            label={`${adoptionPercentage.toFixed(1)}%`}
+            description="DAL Adoption"
+            maxValue={100}
+          />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
     </div>
   );
 }
