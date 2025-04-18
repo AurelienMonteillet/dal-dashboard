@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --foreground-rgb: 255, 255, 255;
+    --background-rgb: 0, 0, 0;
+}
+
+body {
+    color: rgb(var(--foreground-rgb));
+    background: rgb(var(--background-rgb));
+}
+
+/* Styles pour GaugeMeter */
+.GaugeMeter {
+    position: relative;
+    text-align: center;
+    overflow: hidden;
+    cursor: default;
+}
+
+.GaugeMeter SPAN,
+.GaugeMeter B {
+    margin: 0 23%;
+    width: 54%;
+    position: absolute;
+    text-align: center;
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 100;
+    font-family: 'Open Sans', Arial;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.GaugeMeter[data-style='Semi'] B {
+    margin: 0 10%;
+    width: 80%;
+}
+
+.GaugeMeter S,
+.GaugeMeter U {
+    text-decoration: none;
+    font-size: 0.5em;
+    opacity: 0.5;
+}
+
+.GaugeMeter B {
+    color: white;
+    font-weight: 300;
+    font-size: 0.5em;
+    opacity: 0.8;
+}
