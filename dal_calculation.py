@@ -7,7 +7,7 @@ import logging
 import argparse
 import time
 import os
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 from datetime import datetime
 from pathlib import Path
 
@@ -27,6 +27,8 @@ DATA_DIR = Path("/opt/dal_dashboard/data")
 DOCS_DIR = Path("/opt/dal_dashboard/docs")
 RESULTS_FILE_DATA = DATA_DIR / "dal_stats.json"
 RESULTS_FILE_DOCS = DOCS_DIR / "dal_stats.json"
+HISTORY_FILE_DATA = DATA_DIR / "dal_stats_history.json"
+HISTORY_FILE_DOCS = DOCS_DIR / "dal_stats_history.json"
 
 class DALCalculator:
     def __init__(self, network: str = "mainnet"):
@@ -122,6 +124,13 @@ class DALCalculator:
             else:
                 dal_inactive += 1
 
+        # Calculate DAL participation percentage
+        non_attesting_count = total_delegates - non_attesting
+        dal_participation = (dal_active / non_attesting_count * 100) if non_attesting_count > 0 else 0
+        
+        # Calculate DAL adoption percentage
+        dal_adoption = ((total_delegates - dal_inactive - unclassified - non_attesting) / total_delegates * 100) if total_delegates > 0 else 0
+        
         # Prepare results
         results = {
             "timestamp": datetime.now().isoformat(),
@@ -133,7 +142,9 @@ class DALCalculator:
             "non_attesting_bakers": non_attesting,
             "dal_baking_power_percentage": (100 * dal_stake/total_stake) if total_stake > 0 else 0,
             "total_baking_power": total_stake,
-            "dal_baking_power": dal_stake
+            "dal_baking_power": dal_stake,
+            "dal_participation_percentage": dal_participation,
+            "dal_adoption_percentage": dal_adoption
         }
 
         # Save results to data directory
@@ -145,6 +156,52 @@ class DALCalculator:
         DOCS_DIR.mkdir(parents=True, exist_ok=True)
         with open(RESULTS_FILE_DOCS, 'w') as f:
             json.dump(results, f, indent=2)
+            
+        # Update history file - first load existing history
+        history = []
+        if HISTORY_FILE_DATA.exists():
+            try:
+                with open(HISTORY_FILE_DATA, 'r') as f:
+                    history = json.load(f)
+            except json.JSONDecodeError:
+                logger.error("Error reading history file. Creating new one.")
+                history = []
+        
+        # Check if this cycle is already in history
+        cycle_exists = False
+        for entry in history:
+            if entry.get("cycle") == cycle:
+                # Update existing entry
+                entry.update({
+                    "timestamp": results["timestamp"],
+                    "dal_active_bakers": results["dal_active_bakers"],
+                    "dal_baking_power_percentage": results["dal_baking_power_percentage"],
+                    "dal_participation_percentage": results["dal_participation_percentage"],
+                    "dal_adoption_percentage": results["dal_adoption_percentage"]
+                })
+                cycle_exists = True
+                break
+        
+        # If cycle doesn't exist, add new entry
+        if not cycle_exists:
+            history.append({
+                "timestamp": results["timestamp"],
+                "cycle": cycle,
+                "dal_active_bakers": results["dal_active_bakers"],
+                "dal_baking_power_percentage": results["dal_baking_power_percentage"],
+                "dal_participation_percentage": results["dal_participation_percentage"],
+                "dal_adoption_percentage": results["dal_adoption_percentage"]
+            })
+        
+        # Sort history by cycle (descending)
+        history.sort(key=lambda x: x["cycle"], reverse=True)
+        
+        # Save updated history to both locations
+        with open(HISTORY_FILE_DATA, 'w') as f:
+            json.dump(history, f, indent=2)
+            
+        with open(HISTORY_FILE_DOCS, 'w') as f:
+            json.dump(history, f, indent=2)
 
         # Log results
         logger.info("=== Final Results ===")
@@ -155,6 +212,7 @@ class DALCalculator:
         logger.info(f"DAL users represent {100 * dal_active/(dal_active + dal_inactive + unclassified + non_attesting):.2f}% of the total bakers.")
         logger.info(f"DAL users represent {dal_stake/1e6:.1f}M ꜩ / {total_stake/1e6:.1f}M = {100 * dal_stake/total_stake:.2f}% of the baking power.")
         logger.info(f"Results saved to {RESULTS_FILE_DATA} and {RESULTS_FILE_DOCS}")
+        logger.info(f"History updated in {HISTORY_FILE_DATA} and {HISTORY_FILE_DOCS}")
 
 def main():
     parser = argparse.ArgumentParser(description='Calculate DAL statistics for Tezos network')

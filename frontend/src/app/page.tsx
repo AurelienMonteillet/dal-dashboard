@@ -16,8 +16,19 @@ interface DALStats {
   dal_baking_power: number;
 }
 
+// Interface pour les entrées d'historique
+interface HistoryEntry {
+  timestamp: string;
+  cycle: number;
+  dal_active_bakers: number;
+  dal_baking_power_percentage: number;
+  dal_participation_percentage: number;
+  dal_adoption_percentage: number;
+}
+
 // URL du fichier JSON hébergé sur GitHub Pages
 const JSON_URL = process.env.NEXT_PUBLIC_JSON_URL || 'https://aurelienmonteillet.github.io/dal-dashboard/dal_stats.json';
+const HISTORY_URL = process.env.NEXT_PUBLIC_HISTORY_URL || 'https://aurelienmonteillet.github.io/dal-dashboard/dal_stats_history.json';
 
 /**
  * Récupère les statistiques DAL depuis le JSON hébergé sur GitHub Pages
@@ -38,6 +49,27 @@ async function fetchDalStats(): Promise<DALStats> {
   } catch (error) {
     console.error('Error fetching DAL stats:', error);
     throw error;
+  }
+}
+
+/**
+ * Récupère l'historique des statistiques DAL
+ */
+async function fetchDalHistory(): Promise<HistoryEntry[]> {
+  try {
+    const response = await fetch(HISTORY_URL, {
+      cache: 'no-store',
+      next: { revalidate: 3600 }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Network response was not ok: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching DAL history:', error);
+    return []; // Renvoyer un tableau vide en cas d'erreur
   }
 }
 
@@ -91,9 +123,47 @@ const SimpleDalGauge: React.FC<{ value: number; label: string; description: stri
     );
   };
 
+// Composant pour afficher le tableau historique
+const HistoryTable: React.FC<{ history: HistoryEntry[] }> = ({ history }) => {
+  if (!history || history.length === 0) {
+    return <div style={{ color: 'white', textAlign: 'center', padding: '20px' }}>Aucune donnée historique disponible.</div>;
+  }
+
+  return (
+    <div style={{ overflowX: 'auto', marginTop: '4rem' }}>
+      <h2 style={{ color: 'white', fontSize: '24px', marginBottom: '20px', textAlign: 'center' }}>Données historiques par cycle</h2>
+      <table style={{ width: '100%', borderCollapse: 'collapse', color: 'white' }}>
+        <thead>
+          <tr style={{ borderBottom: '1px solid #444', textAlign: 'left' }}>
+            <th style={{ padding: '10px', textAlign: 'center' }}>Cycle</th>
+            <th style={{ padding: '10px', textAlign: 'center' }}>Date</th>
+            <th style={{ padding: '10px', textAlign: 'center' }}>Bakers DAL actifs</th>
+            <th style={{ padding: '10px', textAlign: 'center' }}>Pouvoir de baking (%)</th>
+            <th style={{ padding: '10px', textAlign: 'center' }}>Participation DAL (%)</th>
+            <th style={{ padding: '10px', textAlign: 'center' }}>Adoption DAL (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {history.map((entry) => (
+            <tr key={entry.cycle} style={{ borderBottom: '1px solid #333' }}>
+              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.cycle}</td>
+              <td style={{ padding: '10px', textAlign: 'center' }}>{new Date(entry.timestamp).toLocaleDateString()}</td>
+              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.dal_active_bakers}</td>
+              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.dal_baking_power_percentage.toFixed(1)}%</td>
+              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.dal_participation_percentage.toFixed(1)}%</td>
+              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.dal_adoption_percentage.toFixed(1)}%</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
 export default function Home() {
   // État pour stocker les données DAL
   const [stats, setStats] = useState<DALStats | null>(null);
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -102,8 +172,15 @@ export default function Home() {
     async function loadData() {
       try {
         setLoading(true);
-        const data = await fetchDalStats();
-        setStats(data);
+
+        // Charger les deux ensembles de données en parallèle
+        const [dataStats, dataHistory] = await Promise.all([
+          fetchDalStats(),
+          fetchDalHistory()
+        ]);
+
+        setStats(dataStats);
+        setHistory(dataHistory);
         setError(null);
       } catch (err) {
         console.error('Error loading DAL stats:', err);
@@ -147,7 +224,7 @@ export default function Home() {
         color: 'white',
         fontSize: '24px'
       }}>
-        Loading DAL statistics...
+        Chargement des statistiques DAL...
       </div>
     );
   }
@@ -164,7 +241,7 @@ export default function Home() {
         color: 'red',
         fontSize: '24px'
       }}>
-        Error: {error}
+        Erreur: {error}
       </div>
     );
   }
@@ -192,7 +269,6 @@ export default function Home() {
       </h1>
 
       <div style={{
-        flex: 1,
         display: 'flex',
         alignItems: 'flex-start',
         justifyContent: 'center',
@@ -206,29 +282,32 @@ export default function Home() {
           <SimpleDalGauge
             value={stats?.dal_active_bakers || 0}
             label={`${stats?.dal_active_bakers || 0}/${stats?.total_bakers || 0}`}
-            description="DAL Active Bakers"
+            description="Bakers DAL actifs"
             maxValue={stats?.total_bakers || 100}
           />
           <SimpleDalGauge
             value={stats?.dal_baking_power_percentage || 0}
             label={`${stats?.dal_baking_power_percentage?.toFixed(1) || '0'}%`}
-            description="Baking Power"
+            description="Pouvoir de baking"
             maxValue={100}
           />
           <SimpleDalGauge
             value={participationPercentage}
             label={`${participationPercentage.toFixed(1)}%`}
-            description="DAL Participation"
+            description="Participation DAL"
             maxValue={100}
           />
           <SimpleDalGauge
             value={adoptionPercentage}
             label={`${adoptionPercentage.toFixed(1)}%`}
-            description="DAL Adoption"
+            description="Adoption DAL"
             maxValue={100}
           />
         </div>
       </div>
+
+      {/* Tableau historique */}
+      <HistoryTable history={history} />
     </div>
   );
 }

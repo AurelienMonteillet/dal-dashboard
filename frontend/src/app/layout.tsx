@@ -1,36 +1,29 @@
 'use client';
 
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
-import Script from "next/script";
+import './globals.css';
+import { Inter } from 'next/font/google';
 
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-});
+// Police Google Fonts
+const inter = Inter({ subsets: ['latin'] });
 
-export const metadata: Metadata = {
-  title: "Tezos DAL-o-meter",
-  description: "Dashboard for monitoring Tezos DAL adoption metrics",
+// Métadonnées pour la page
+export const metadata = {
+  title: 'Tableau de bord DAL Tezos',
+  description: 'Tableau de bord pour la participation au DAL (Couche d\'Disponibilité des Données) sur le réseau Tezos',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
+    <html lang="fr">
       <head>
-        <Script
-          src="https://code.jquery.com/jquery-3.7.1.min.js"
-          strategy="beforeInteractive"
-        />
+        {/* Inclure jQuery pour permettre d'autres fonctionnalités plus tard */}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
       </head>
-      <body className={`${inter.className} antialiased`}>
-        {children}
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
