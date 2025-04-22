@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 const HISTORY_URL = process.env.NEXT_PUBLIC_HISTORY_URL || 'https://aurelienmonteillet.github.io/dal-dashboard/dal_stats_history.json';
 
@@ -7,9 +7,10 @@ const HISTORY_URL = process.env.NEXT_PUBLIC_HISTORY_URL || 'https://aurelienmont
  */
 export async function GET(
     request: Request,
-    { params }: { params: { cycle: string } }
+    context: { params: Promise<{ cycle: string }> }
 ) {
     try {
+        const params = await context.params;
         const cycle = parseInt(params.cycle);
 
         if (isNaN(cycle)) {
