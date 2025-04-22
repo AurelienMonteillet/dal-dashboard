@@ -7,13 +7,15 @@ import json
 from pathlib import Path
 import subprocess
 import logging
+import sys
+import os
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Path to results file
-RESULTS_FILE = Path("/opt/dal_dashboard/data/dal_stats.json")
+RESULTS_FILE = Path("/opt/dal_dashboard/backend/data/dal_stats.json")
 
 app = FastAPI(
     title="DAL-o-meter API",
@@ -42,6 +44,8 @@ class DALStatsResponse(BaseModel):
     dal_baking_power_percentage: float
     total_baking_power: float
     dal_baking_power: float
+    dal_participation_percentage: float = 0.0
+    dal_adoption_percentage: float = 0.0
 
 def read_dal_stats():
     """Read DAL statistics from file"""
@@ -54,7 +58,8 @@ def read_dal_stats():
     except FileNotFoundError:
         logger.error("DAL stats file not found. Running initial calculation...")
         # Run the calculation script if file doesn't exist
-        subprocess.run(["/opt/dal_dashboard/dal_calculation.py", "--network", "mainnet"], check=True)
+        script_path = "/opt/dal_dashboard/backend/scripts/dal_calculation.py"
+        subprocess.run([script_path, "--network", "mainnet"], check=True)
         # Try reading again
         with open(RESULTS_FILE, 'r') as f:
             data = json.load(f)
