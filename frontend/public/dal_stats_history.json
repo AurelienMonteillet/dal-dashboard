@@ -1,18 +1,1 @@
-[
-    {
-        "timestamp": "2023-04-17T16:42:00.000Z",
-        "cycle": 852,
-        "dal_active_bakers": 62,
-        "dal_baking_power_percentage": 28.13,
-        "dal_participation_percentage": 27.56,
-        "dal_adoption_percentage": 22.17
-    },
-    {
-        "timestamp": "2023-04-15T13:21:00.000Z",
-        "cycle": 851,
-        "dal_active_bakers": 58,
-        "dal_baking_power_percentage": 26.42,
-        "dal_participation_percentage": 25.78,
-        "dal_adoption_percentage": 20.95
-    }
-]
+../../backend/data/dal_stats_history.json

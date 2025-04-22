@@ -16,19 +16,29 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('dal_stats.log'),
+        logging.FileHandler('logs/dal_stats.log'),
         logging.StreamHandler(sys.stdout)
     ]
 )
 logger = logging.getLogger(__name__)
 
 # Define the path for storing results
-DATA_DIR = Path("/opt/dal_dashboard/data")
-DOCS_DIR = Path("/opt/dal_dashboard/docs")
-RESULTS_FILE_DATA = DATA_DIR / "dal_stats.json"
-RESULTS_FILE_DOCS = DOCS_DIR / "dal_stats.json"
-HISTORY_FILE_DATA = DATA_DIR / "dal_stats_history.json"
-HISTORY_FILE_DOCS = DOCS_DIR / "dal_stats_history.json"
+DATA_DIR = Path("/opt/dal_dashboard/backend/data")
+
+# Create argument parser to accept output directory
+def parse_args():
+    parser = argparse.ArgumentParser(description='Calculate DAL statistics for Tezos network')
+    parser.add_argument('--network', type=str, default='mainnet', help='Network to analyze (default: mainnet)')
+    parser.add_argument('--output-dir', type=str, help='Output directory for data files')
+    return parser.parse_args()
+
+# Initialize paths
+args = parse_args()
+if args.output_dir:
+    DATA_DIR = Path(args.output_dir)
+
+RESULTS_FILE = DATA_DIR / "dal_stats.json"
+HISTORY_FILE = DATA_DIR / "dal_stats_history.json"
 
 class DALCalculator:
     def __init__(self, network: str = "mainnet"):
@@ -149,19 +159,14 @@ class DALCalculator:
 
         # Save results to data directory
         DATA_DIR.mkdir(parents=True, exist_ok=True)
-        with open(RESULTS_FILE_DATA, 'w') as f:
-            json.dump(results, f, indent=2)
-        
-        # Save results to docs directory for GitHub Pages
-        DOCS_DIR.mkdir(parents=True, exist_ok=True)
-        with open(RESULTS_FILE_DOCS, 'w') as f:
+        with open(RESULTS_FILE, 'w') as f:
             json.dump(results, f, indent=2)
             
         # Update history file - first load existing history
         history = []
-        if HISTORY_FILE_DATA.exists():
+        if HISTORY_FILE.exists():
             try:
-                with open(HISTORY_FILE_DATA, 'r') as f:
+                with open(HISTORY_FILE, 'r') as f:
                     history = json.load(f)
             except json.JSONDecodeError:
                 logger.error("Error reading history file. Creating new one.")
@@ -196,11 +201,8 @@ class DALCalculator:
         # Sort history by cycle (descending)
         history.sort(key=lambda x: x["cycle"], reverse=True)
         
-        # Save updated history to both locations
-        with open(HISTORY_FILE_DATA, 'w') as f:
-            json.dump(history, f, indent=2)
-            
-        with open(HISTORY_FILE_DOCS, 'w') as f:
+        # Save updated history
+        with open(HISTORY_FILE, 'w') as f:
             json.dump(history, f, indent=2)
 
         # Log results
@@ -211,14 +213,11 @@ class DALCalculator:
         logger.info(f"{non_attesting} bakers sent no attestations.")
         logger.info(f"DAL users represent {100 * dal_active/(dal_active + dal_inactive + unclassified + non_attesting):.2f}% of the total bakers.")
         logger.info(f"DAL users represent {dal_stake/1e6:.1f}M ꜩ / {total_stake/1e6:.1f}M = {100 * dal_stake/total_stake:.2f}% of the baking power.")
-        logger.info(f"Results saved to {RESULTS_FILE_DATA} and {RESULTS_FILE_DOCS}")
-        logger.info(f"History updated in {HISTORY_FILE_DATA} and {HISTORY_FILE_DOCS}")
+        logger.info(f"Results saved to {RESULTS_FILE}")
+        logger.info(f"History updated in {HISTORY_FILE}")
 
 def main():
-    parser = argparse.ArgumentParser(description='Calculate DAL statistics for Tezos network')
-    parser.add_argument('--network', type=str, default='mainnet', help='Network to analyze (default: mainnet)')
-    args = parser.parse_args()
-
+    args = parse_args()
     calculator = DALCalculator(network=args.network)
     calculator.calculate_stats()
 
