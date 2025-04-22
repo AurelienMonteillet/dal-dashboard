@@ -24,9 +24,9 @@ const DalGaugeMeter: React.FC<DalGaugeMeterProps> = ({ value, label, maxValue = 
     const percentage = Math.round((value / maxValue) * 100);
 
     useEffect(() => {
-        // Vérifier si jQuery et GaugeMeter sont disponibles
+        // Check if jQuery and GaugeMeter are available
         if (typeof window !== 'undefined' && window.jQuery && window.jQuery.fn.gaugeMeter) {
-            // Initialiser la jauge
+            // Initialize the gauge
             window.jQuery(`#${gaugeId.current}`).gaugeMeter({
                 percent: percentage,
                 text: label,
@@ -40,7 +40,7 @@ const DalGaugeMeter: React.FC<DalGaugeMeterProps> = ({ value, label, maxValue = 
         }
     }, [percentage, label]);
 
-    // Mettre à jour la jauge si la valeur change
+    // Update the gauge if the value changes
     useEffect(() => {
         if (typeof window !== 'undefined' && window.jQuery && window.jQuery.fn.gaugeMeter) {
             window.jQuery(`#${gaugeId.current}`).gaugeMeter({

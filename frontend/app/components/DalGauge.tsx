@@ -16,7 +16,7 @@ const DalGauge: React.FC<DalGaugeProps> = ({ value, label, maxValue = 100 }) => 
         <div className="flex flex-col items-center">
             <div className="w-[25px] h-[12px]">
                 <svg viewBox="0 0 100 50" className="w-full h-full">
-                    {/* Arc de fond */}
+                    {/* Background arc */}
                     <path
                         d="M 10 50 A 40 40 0 0 1 90 50"
                         fill="none"
@@ -24,7 +24,7 @@ const DalGauge: React.FC<DalGaugeProps> = ({ value, label, maxValue = 100 }) => 
                         strokeWidth="8"
                         strokeLinecap="round"
                     />
-                    {/* Aiguille */}
+                    {/* Needle */}
                     <line
                         x1="50"
                         y1="50"
