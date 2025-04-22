@@ -12,7 +12,6 @@ Example: `63/295` means 63 out of 295 total bakers have activated DAL.
 
 ### Baking Power
 Represents the percentage of total Tezos staking power controlled by bakers who have activated DAL. 
-This metric is economically significant as it shows how much of the network's security is provided by DAL-enabled bakers.
 
 ### DAL Participation
 Calculated as: `(dal_active_bakers / (total_bakers - non_attesting_bakers)) * 100`
