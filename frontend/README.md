@@ -9,6 +9,7 @@ This is the frontend for the Tezos DAL-o-meter dashboard, built with Next.js. It
 - Responsive design for desktop and mobile viewing
 - Automatic data refresh (hourly)
 - Manual history loading option for debugging
+- REST API for programmatic access to DAL statistics
 
 ## Project Structure
 
@@ -20,9 +21,47 @@ The frontend is organized as follows:
   - `globals.css` - Global CSS styles
   - `components/` - React components
     - `SimpleDalGauge.tsx` - SVG-based gauge component for DAL statistics
+  - `api/` - REST API endpoints
+    - `stats/` - Current DAL statistics
+    - `history/` - Historical DAL statistics
+    - `cycle/[cycle]/` - Statistics for a specific cycle
 
 - `public/` - Static files
   - `dal_stats_history.json` - Backup for historical DAL data
+
+## API Documentation
+
+The dashboard provides REST API endpoints to access DAL statistics programmatically:
+
+### Current Statistics
+
+```
+GET /api/stats
+```
+
+Returns the latest DAL statistics for the current cycle.
+
+### Historical Data
+
+```
+GET /api/history
+```
+
+Returns an array of historical DAL statistics for all recorded cycles.
+
+### Cycle-Specific Data
+
+```
+GET /api/cycle/{cycle_number}
+```
+
+Returns DAL statistics for a specific cycle.
+
+Example: `/api/cycle/853`
+
+All API endpoints return JSON data with the following headers:
+- `Access-Control-Allow-Origin: *` (CORS enabled)
+- `Cache-Control: max-age=3600` (Cached for 1 hour)
 
 ## Local Development
 
