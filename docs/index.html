@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tezos DAL-o-meter Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .json-link {
+            background: #eee;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 5px solid #3498db;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tezos DAL-o-meter Data API</h1>
+    <p>This page serves data for the Tezos DAL-o-meter Dashboard. The data is available in JSON format at the following URLs:</p>
+    
+    <div class="json-link">
+        <p><strong>Current DAL Statistics:</strong><br>
+        <a href="dal_stats.json">dal_stats.json</a></p>
+    </div>
+    
+    <div class="json-link">
+        <p><strong>Historical DAL Statistics:</strong><br>
+        <a href="dal_stats_history.json">dal_stats_history.json</a></p>
+    </div>
+    
+    <p>These endpoints are updated periodically to reflect the latest data from the Tezos blockchain.</p>
+    <p>Visit the <a href="https://github.com/aurelienmonteillet/dal-dashboard" target="_blank">GitHub repository</a> for more information about the DAL-o-meter project.</p>
+</body>
+</html> 

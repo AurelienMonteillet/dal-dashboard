@@ -19,6 +19,13 @@ if git diff --quiet backend/data/dal_stats.json; then
 else
     echo "Changes detected, committing and pushing..."
     
+    # Ensure docs directory exists
+    mkdir -p docs
+    
+    # Copy JSON files to docs directory for GitHub Pages
+    cp backend/data/dal_stats.json docs/
+    cp backend/data/dal_stats_history.json docs/
+    
     # Set up SSH agent with the automation key
     eval "$(ssh-agent -s)"
     ssh-add ~/.ssh/github_automation_key
@@ -27,7 +34,7 @@ else
     git config --local core.sshCommand "ssh -i ~/.ssh/github_automation_key -F /dev/null"
     
     # Add and commit changes
-    git add backend/data/dal_stats.json backend/data/dal_stats_history.json
+    git add backend/data/dal_stats.json backend/data/dal_stats_history.json docs/
     git commit -m "Update DAL stats for cycle $(jq -r '.cycle' backend/data/dal_stats.json) ($(date +%Y-%m-%d))"
     
     # Push changes

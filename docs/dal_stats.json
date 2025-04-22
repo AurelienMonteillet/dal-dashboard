@@ -1,0 +1,14 @@
+{
+  "timestamp": "2025-04-22T17:09:14.656666",
+  "cycle": 854,
+  "total_bakers": 295,
+  "dal_active_bakers": 63,
+  "dal_inactive_bakers": 223,
+  "unclassified_bakers": 3,
+  "non_attesting_bakers": 6,
+  "dal_baking_power_percentage": 27.614725737303647,
+  "total_baking_power": 384748516960365,
+  "dal_baking_power": 106247247736948,
+  "dal_participation_percentage": 21.79930795847751,
+  "dal_adoption_percentage": 21.35593220338983
+}
