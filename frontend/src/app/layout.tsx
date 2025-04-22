@@ -3,13 +3,13 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
 
-// Police Google Fonts
+// Google Fonts
 const inter = Inter({ subsets: ['latin'] });
 
-// Métadonnées pour la page
+// Page metadata
 export const metadata = {
-  title: 'Tableau de bord DAL Tezos',
-  description: 'Tableau de bord pour la participation au DAL (Couche d\'Disponibilité des Données) sur le réseau Tezos',
+  title: 'Tezos DAL Dashboard',
+  description: 'Dashboard for Data Availability Layer (DAL) participation on the Tezos network',
 };
 
 export default function RootLayout({
@@ -18,9 +18,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fr">
+    <html lang="en">
       <head>
-        {/* Inclure jQuery pour permettre d'autres fonctionnalités plus tard */}
+        {/* Include jQuery to allow for additional functionality later */}
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
       </head>
       <body className={inter.className}>{children}</body>

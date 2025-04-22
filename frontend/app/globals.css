@@ -12,7 +12,7 @@ body {
     background: rgb(var(--background-rgb));
 }
 
-/* Styles pour GaugeMeter */
+/* Styles for GaugeMeter */
 .GaugeMeter {
     position: relative;
     text-align: center;
