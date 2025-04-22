@@ -1,22 +1,22 @@
 export interface DALStats {
-    // Horodatage de la collecte des statistiques
+    // Timestamp of statistics collection
     timestamp: string;
-    // Cycle actuel du réseau Tezos
+    // Current cycle of the Tezos network
     cycle: number;
-    // Nombre total de bakers sur le réseau
+    // Total number of bakers on the network
     total_bakers: number;
-    // Nombre de bakers actifs participant au DAL
+    // Number of active bakers participating in DAL
     dal_active_bakers: number;
-    // Nombre de bakers inactifs pour le DAL
+    // Number of inactive bakers for DAL
     dal_inactive_bakers: number;
-    // Nombre de bakers non classifiés
+    // Number of unclassified bakers
     unclassified_bakers: number;
-    // Nombre de bakers qui n'attestent pas
+    // Number of non-attesting bakers
     non_attesting_bakers: number;
-    // Pourcentage du pouvoir de baking participant au DAL
+    // Percentage of baking power participating in DAL
     dal_baking_power_percentage: number;
-    // Pouvoir de baking total sur le réseau
+    // Total baking power on the network
     total_baking_power: number;
-    // Pouvoir de baking des participants au DAL
+    // Baking power of DAL participants
     dal_baking_power: number;
 } 

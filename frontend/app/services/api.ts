@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * Service pour récupérer les statistiques DAL depuis GitHub Pages
+ * Service to retrieve DAL statistics from GitHub Pages
  */
 
 export interface DALStats {
@@ -17,18 +17,18 @@ export interface DALStats {
     dal_baking_power: number;
 }
 
-// URL du fichier JSON hébergé sur GitHub Pages
+// URL of the JSON file hosted on GitHub Pages
 const JSON_URL = process.env.NEXT_PUBLIC_JSON_URL || 'https://aurelienmonteillet.github.io/dal-dashboard/dal_stats.json';
 
 /**
- * Récupère les statistiques DAL depuis le JSON hébergé sur GitHub Pages
+ * Retrieves DAL statistics from the JSON hosted on GitHub Pages
  */
 export async function fetchDalStats(): Promise<DALStats> {
     try {
         const response = await fetch(JSON_URL, {
-            // Nécessaire pour éviter la mise en cache de la réponse
+            // Necessary to avoid caching the response
             cache: 'no-store',
-            next: { revalidate: 3600 } // Revalider toutes les heures
+            next: { revalidate: 3600 } // Revalidate every hour
         });
 
         if (!response.ok) {
