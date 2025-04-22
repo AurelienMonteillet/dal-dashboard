@@ -2,6 +2,27 @@
 
 This dashboard allows real-time visualization of the adoption statistics of the DAL (Data Availability Layer) protocol on the Tezos network.
 
+## Metrics Explained
+
+The dashboard displays four key metrics to measure DAL adoption:
+
+### DAL Active Bakers
+Shows the number and percentage of active bakers that have enabled the DAL protocol. 
+Example: `63/295` means 63 out of 295 total bakers have activated DAL.
+
+### Baking Power
+Represents the percentage of total Tezos staking power controlled by bakers who have activated DAL. 
+This metric is economically significant as it shows how much of the network's security is provided by DAL-enabled bakers.
+
+### DAL Participation
+Calculated as: `(dal_active_bakers / (total_bakers - non_attesting_bakers)) * 100`
+This measures the participation rate among active bakers who are making attestations.
+It provides a more accurate view of participation by excluding inactive bakers.
+
+### DAL Adoption
+Calculated as: `((total_bakers - dal_inactive_bakers - unclassified_bakers - non_attesting_bakers) / total_bakers) * 100`
+This represents the overall adoption rate of DAL among all bakers on the Tezos network.
+
 ## Project Structure
 
 The project has been optimized with a clean separation of concerns:
