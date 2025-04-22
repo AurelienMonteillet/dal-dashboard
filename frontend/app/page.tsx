@@ -103,7 +103,6 @@ const HistoryTable: React.FC<{ history: HistoryEntry[] }> = ({ history }) => {
 
   return (
     <div style={{ overflowX: 'auto', marginTop: '4rem' }}>
-      <h2 style={{ color: 'white', fontSize: '24px', marginBottom: '20px', textAlign: 'center' }}>Historical data by cycle</h2>
       <table style={{ width: '100%', borderCollapse: 'collapse', color: 'white' }}>
         <thead>
           <tr style={{ borderBottom: '1px solid #444', textAlign: 'left' }}>
@@ -316,43 +315,6 @@ export default function Home() {
         }}>
           Cycle History
         </h2>
-
-        {/* Debug button */}
-        <div style={{ marginBottom: '20px', textAlign: 'center' }}>
-          <button
-            onClick={loadHistoryManually}
-            style={{
-              background: '#3B82F6',
-              border: 'none',
-              color: 'white',
-              padding: '10px 20px',
-              borderRadius: '4px',
-              cursor: 'pointer'
-            }}
-          >
-            Load history manually
-          </button>
-
-          {debug && (
-            <pre style={{
-              marginTop: '10px',
-              padding: '10px',
-              background: '#222',
-              color: '#0f0',
-              borderRadius: '4px',
-              textAlign: 'left',
-              overflowX: 'auto',
-              maxHeight: '150px'
-            }}>
-              {debug}
-            </pre>
-          )}
-        </div>
-
-        {/* Debug information */}
-        <div style={{ color: 'yellow', marginBottom: '20px', textAlign: 'center' }}>
-          History length: {history?.length || 0}
-        </div>
 
         {/* Normal history table */}
         <HistoryTable history={history} />

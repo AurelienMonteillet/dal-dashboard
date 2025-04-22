@@ -74,11 +74,79 @@ The project has been optimized with a clean separation of concerns:
 
 ## API Endpoints
 
-The dashboard provides several API endpoints:
+The dashboard provides RESTful API endpoints that return JSON data with CORS headers enabled:
 
-- `/api/stats` - Current DAL statistics
-- `/api/history` - History of DAL statistics by cycle
-- `/api/cycle/[cycle]` - Data for a specific cycle
+### Current DAL Statistics
+
+```
+GET /api/stats
+```
+
+Returns the latest DAL statistics for the current cycle.
+
+Example response:
+```json
+{
+  "timestamp": "2025-04-22T15:07:38.442367",
+  "cycle": 854,
+  "total_bakers": 295,
+  "dal_active_bakers": 63,
+  "dal_inactive_bakers": 223,
+  "unclassified_bakers": 3,
+  "non_attesting_bakers": 6,
+  "dal_baking_power_percentage": 27.61,
+  "total_baking_power": 384748516960365,
+  "dal_baking_power": 106247247736948,
+  "dal_participation_percentage": 21.80,
+  "dal_adoption_percentage": 21.36
+}
+```
+
+### Historical DAL Statistics
+
+```
+GET /api/history
+```
+
+Returns the history of DAL statistics across multiple cycles.
+
+Example response:
+```json
+[
+  {
+    "timestamp": "2025-04-22T15:07:38.442367",
+    "cycle": 854,
+    "dal_active_bakers": 63,
+    "dal_baking_power_percentage": 27.61,
+    "dal_participation_percentage": 21.80,
+    "dal_adoption_percentage": 21.36
+  },
+  {
+    "timestamp": "2023-04-17T10:15:32.123456",
+    "cycle": 852,
+    "dal_active_bakers": 62,
+    "dal_baking_power_percentage": 28.10,
+    "dal_participation_percentage": 27.60,
+    "dal_adoption_percentage": 22.20
+  }
+  // ...more cycles
+]
+```
+
+### Cycle-Specific Statistics
+
+```
+GET /api/cycle/[cycle]
+```
+
+Returns DAL statistics for a specific cycle.
+
+Example: `/api/cycle/854`
+
+All API endpoints include the following CORS headers:
+- `Access-Control-Allow-Origin: *`
+- `Access-Control-Allow-Methods: GET`
+- `Cache-Control: max-age=3600`
 
 ## Manual Data Updates
 
