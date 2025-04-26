@@ -9,6 +9,17 @@ cd /opt/dal_dashboard
 # Activate virtual environment
 source venv/bin/activate
 
+# Store current branch
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+echo "Current branch: $CURRENT_BRANCH"
+
+# Check if we need to switch to main
+if [ "$CURRENT_BRANCH" != "main" ]; then
+    echo "Not on main branch. Switching to main for updates..."
+    git stash
+    git checkout main
+fi
+
 # Run the calculation script
 echo "Running DAL calculation script..."
 python backend/scripts/dal_calculation.py --network mainnet --output-dir backend/data
@@ -44,6 +55,13 @@ else
     ssh-agent -k
     
     echo "Changes pushed successfully!"
+fi
+
+# Return to original branch if needed
+if [ "$CURRENT_BRANCH" != "main" ]; then
+    echo "Switching back to $CURRENT_BRANCH branch..."
+    git checkout "$CURRENT_BRANCH"
+    git stash pop || true
 fi
 
 # Log output to file
