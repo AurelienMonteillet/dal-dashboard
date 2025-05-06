@@ -1,26 +1,58 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 interface SimpleDalGaugeProps {
     value: number;
     label: string;
     description: string;
     maxValue?: number;
+    tooltip?: string;
 }
 
-const SimpleDalGauge: React.FC<SimpleDalGaugeProps> = ({ value, label, description, maxValue = 100 }) => {
+const SimpleDalGauge: React.FC<SimpleDalGaugeProps> = ({ 
+    value, 
+    label, 
+    description, 
+    maxValue = 100,
+    tooltip 
+}) => {
+    const [showTooltip, setShowTooltip] = useState(false);
     const percentage = Math.round((value / maxValue) * 100);
 
+    const tooltipStyle = {
+        position: 'absolute' as const,
+        top: '100%',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        backgroundColor: '#2a2d34',
+        color: 'white',
+        padding: '1rem',
+        borderRadius: '4px',
+        width: '300px',
+        zIndex: 1000,
+        boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
+        marginTop: '0.5rem',
+        whiteSpace: 'pre-line' as const,
+        lineHeight: '1.5',
+        fontSize: '14px'
+    };
+
     return (
-        <div style={{
-            width: '25%',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            boxSizing: 'border-box',
-            padding: '0 10px'
-        }}>
+        <div 
+            style={{
+                width: '25%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                boxSizing: 'border-box',
+                padding: '0 10px',
+                position: 'relative',
+                cursor: 'help'
+            }}
+            onMouseEnter={() => setShowTooltip(true)}
+            onMouseLeave={() => setShowTooltip(false)}
+        >
             <div style={{ textAlign: 'center', marginBottom: '10px' }}>
                 <span style={{ color: 'white', fontSize: '20px', fontWeight: 'bold' }}>{label}</span>
             </div>
@@ -51,8 +83,20 @@ const SimpleDalGauge: React.FC<SimpleDalGaugeProps> = ({ value, label, descripti
             </svg>
 
             <div style={{ textAlign: 'center', marginTop: '10px' }}>
-                <span style={{ color: 'white', fontSize: '14px', opacity: '0.8' }}>{description}</span>
+                <span style={{ 
+                    color: 'white', 
+                    fontSize: '14px', 
+                    opacity: '0.8'
+                }}>
+                    {description}
+                </span>
             </div>
+
+            {tooltip && showTooltip && (
+                <div style={tooltipStyle}>
+                    {tooltip}
+                </div>
+            )}
         </div>
     );
 };

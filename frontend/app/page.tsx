@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import SimpleDalGauge from './components/SimpleDalGauge';
+import FAQ from './components/FAQ';
 
 // Interface for DAL statistics
 interface DALStats {
@@ -277,24 +278,42 @@ export default function Home() {
             label={`${stats?.dal_active_bakers || 0}/${stats?.total_bakers || 0}`}
             description="DAL Active Bakers"
             maxValue={stats?.total_bakers || 100}
+            tooltip={`Number and percentage of active bakers that have enabled the DAL protocol. For example, '${stats?.dal_active_bakers || 0}/${stats?.total_bakers || 0}' means ${stats?.dal_active_bakers || 0} out of ${stats?.total_bakers || 0} bakers have activated DAL.`}
           />
           <SimpleDalGauge
             value={stats?.dal_baking_power_percentage || 0}
             label={`${stats?.dal_baking_power_percentage?.toFixed(1) || '0'}%`}
             description="Baking Power"
             maxValue={100}
+            tooltip={`Percentage of total Tezos staking power controlled by bakers who have activated DAL. Currently, ${stats?.dal_baking_power_percentage?.toFixed(1) || '0'}% of the total baking power is controlled by DAL bakers.`}
           />
           <SimpleDalGauge
             value={participationPercentage}
             label={`${participationPercentage.toFixed(1)}%`}
             description="DAL Participation"
             maxValue={100}
+            tooltip={`Measures the participation rate among active bakers who are making attestations. Currently, ${participationPercentage.toFixed(1)}% of active bakers are participating in DAL.
+
+This metric only considers bakers who are actively making attestations (${(stats?.total_bakers || 0) - (stats?.non_attesting_bakers || 0)} out of ${stats?.total_bakers || 0} total bakers).
+
+Calculation:
+• Active DAL bakers: ${stats?.dal_active_bakers || 0}
+• Total active bakers (excluding non-attesting): ${(stats?.total_bakers || 0) - (stats?.non_attesting_bakers || 0)}
+• Formula: (DAL active bakers / (total bakers - non-attesting bakers)) * 100`}
           />
           <SimpleDalGauge
             value={adoptionPercentage}
             label={`${adoptionPercentage.toFixed(1)}%`}
             description="DAL Adoption"
             maxValue={100}
+            tooltip={`Overall adoption rate of DAL among all bakers on the Tezos network. Currently, ${adoptionPercentage.toFixed(1)}% of all bakers have adopted DAL.
+
+This metric excludes:
+• Bakers who haven't activated DAL (${stats?.dal_inactive_bakers || 0})
+• Bakers whose DAL status cannot be determined (${stats?.unclassified_bakers || 0})
+• Bakers who haven't made any attestations (${stats?.non_attesting_bakers || 0})
+
+Calculated as: ((total bakers - DAL inactive bakers - unclassified bakers - non-attesting bakers) / total bakers) * 100`}
           />
         </div>
       </div>
@@ -319,6 +338,9 @@ export default function Home() {
         {/* Normal history table */}
         <HistoryTable history={history} />
       </div>
+
+      {/* FAQ Section */}
+      <FAQ />
     </div>
   );
 }
