@@ -1,14 +1,14 @@
 {
-  "timestamp": "2025-05-28T00:28:56.301470",
+  "timestamp": "2025-05-28T06:31:09.958436",
   "cycle": 884,
   "total_bakers": 279,
-  "dal_active_bakers": 136,
+  "dal_active_bakers": 137,
   "dal_inactive_bakers": 135,
-  "unclassified_bakers": 4,
+  "unclassified_bakers": 3,
   "non_attesting_bakers": 4,
-  "dal_baking_power_percentage": 50.36395534037767,
+  "dal_baking_power_percentage": 50.365743746903505,
   "total_baking_power": 406708128825634,
-  "dal_baking_power": 204834300367428,
-  "dal_participation_percentage": 49.45454545454545,
-  "dal_adoption_percentage": 48.74551971326165
+  "dal_baking_power": 204841573962145,
+  "dal_participation_percentage": 49.81818181818182,
+  "dal_adoption_percentage": 49.10394265232975
 }
