@@ -37,6 +37,10 @@ else
     cp backend/data/dal_stats.json docs/
     cp backend/data/dal_stats_history.json docs/
     
+    # Copy JSON files to frontend/public for local fallback in the frontend
+    cp backend/data/dal_stats.json frontend/public/
+    cp backend/data/dal_stats_history.json frontend/public/
+    
     # Set up SSH agent with the automation key
     eval "$(ssh-agent -s)"
     ssh-add ~/.ssh/github_automation_key
@@ -45,7 +49,7 @@ else
     git config --local core.sshCommand "ssh -i ~/.ssh/github_automation_key -F /dev/null"
     
     # Add and commit changes
-    git add backend/data/dal_stats.json backend/data/dal_stats_history.json docs/
+    git add backend/data/dal_stats.json backend/data/dal_stats_history.json docs/ frontend/public/dal_stats.json frontend/public/dal_stats_history.json
     git commit -m "Update DAL stats for cycle $(jq -r '.cycle' backend/data/dal_stats.json) ($(date +%Y-%m-%d))"
     
     # Push changes
