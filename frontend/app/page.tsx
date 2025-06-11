@@ -211,7 +211,7 @@ export default function Home() {
     return (
       <div style={{
         minHeight: '100vh',
-        backgroundColor: 'black',
+        /* backgroundColor: 'black', */
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -228,7 +228,7 @@ export default function Home() {
     return (
       <div style={{
         minHeight: '100vh',
-        backgroundColor: 'black',
+        /* backgroundColor: 'black', */
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -246,7 +246,7 @@ export default function Home() {
   return (
     <div style={{
       minHeight: '100vh',
-      backgroundColor: 'black',
+      /* backgroundColor: 'black', */
       display: 'flex',
       flexDirection: 'column',
       padding: '2rem'
@@ -321,10 +321,10 @@ Calculated as: ((total bakers - DAL inactive bakers - unclassified bakers - non-
       {/* History Table */}
       <div style={{
         marginTop: '4rem',
-        padding: '1rem',
+        padding: '2rem',
         border: '1px solid #444',
         borderRadius: '4px',
-        backgroundColor: '#111'
+        backgroundColor: '#23272f'
       }}>
         <h2 style={{
           color: 'white',

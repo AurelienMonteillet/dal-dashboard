@@ -9,13 +9,15 @@ import subprocess
 import logging
 import sys
 import os
+import requests
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Path to results file
-RESULTS_FILE = Path("/opt/dal_dashboard/backend/data/dal_stats.json")
+# GitHub Pages URL and local fallback
+GITHUB_PAGES_URL = "https://aurelienmonteillet.github.io/dal-dashboard/dal_stats.json"
+LOCAL_RESULTS_FILE = Path("/opt/dal_dashboard/backend/data/dal_stats.json")
 
 app = FastAPI(
     title="DAL-o-meter API",
@@ -48,31 +50,44 @@ class DALStatsResponse(BaseModel):
     dal_adoption_percentage: float = 0.0
 
 def read_dal_stats():
-    """Read DAL statistics from file"""
+    """Read DAL statistics from GitHub Pages with local fallback"""
     try:
-        with open(RESULTS_FILE, 'r') as f:
-            data = json.load(f)
-            # Convert string timestamp to datetime
-            data['timestamp'] = datetime.fromisoformat(data['timestamp'])
-            return data
-    except FileNotFoundError:
-        logger.error("DAL stats file not found. Running initial calculation...")
-        # Run the calculation script if file doesn't exist
-        script_path = "/opt/dal_dashboard/backend/scripts/dal_calculation.py"
-        subprocess.run([script_path, "--network", "mainnet"], check=True)
-        # Try reading again
-        with open(RESULTS_FILE, 'r') as f:
-            data = json.load(f)
-            data['timestamp'] = datetime.fromisoformat(data['timestamp'])
-            return data
+        # Try to fetch from GitHub Pages first
+        logger.info("Fetching DAL stats from GitHub Pages...")
+        response = requests.get(GITHUB_PAGES_URL, timeout=5)
+        response.raise_for_status()
+        data = response.json()
+        # Convert string timestamp to datetime
+        data['timestamp'] = datetime.fromisoformat(data['timestamp'])
+        logger.info(f"Successfully fetched cycle {data['cycle']} from GitHub Pages")
+        return data
     except Exception as e:
-        logger.error(f"Error reading DAL stats: {e}")
-        raise HTTPException(status_code=500, detail="Error reading DAL statistics")
+        logger.warning(f"Could not fetch from GitHub Pages: {e}. Falling back to local file.")
+        try:
+            # Fallback to local file
+            with open(LOCAL_RESULTS_FILE, 'r') as f:
+                data = json.load(f)
+                data['timestamp'] = datetime.fromisoformat(data['timestamp'])
+                logger.info(f"Successfully read cycle {data['cycle']} from local file")
+                return data
+        except FileNotFoundError:
+            logger.error("Local DAL stats file not found. Running initial calculation...")
+            # Run the calculation script if file doesn't exist
+            script_path = "/opt/dal_dashboard/backend/scripts/dal_calculation.py"
+            subprocess.run([script_path, "--network", "mainnet"], check=True)
+            # Try reading again
+            with open(LOCAL_RESULTS_FILE, 'r') as f:
+                data = json.load(f)
+                data['timestamp'] = datetime.fromisoformat(data['timestamp'])
+                return data
+        except Exception as e:
+            logger.error(f"Error reading DAL stats: {e}")
+            raise HTTPException(status_code=500, detail="Error reading DAL statistics")
 
 @app.get("/api/stats", response_model=DALStatsResponse)
 async def get_stats():
     """
-    Get the latest DAL statistics from stored results.
+    Get the latest DAL statistics from GitHub Pages.
     
     Returns:
         DALStatsResponse: Current DAL statistics
