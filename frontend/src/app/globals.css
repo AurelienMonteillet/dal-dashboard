@@ -24,3 +24,105 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Custom styles for the dashboard */
+.dashboard-section {
+  margin-top: 4rem;
+  padding: 2rem;
+  border: 1px solid #2a2d34;
+  border-radius: 12px;
+  background-color: #1a1a1a;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-title {
+  color: white;
+  font-size: 28px;
+  margin-bottom: 30px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.dashboard-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.dashboard-table th {
+  background-color: #2a2d34;
+  padding: 16px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 16px;
+  border-bottom: 2px solid #3B82F6;
+}
+
+.dashboard-table td {
+  padding: 16px;
+  text-align: center;
+  border-bottom: 1px solid #3a3d44;
+}
+
+.dashboard-table tr:nth-child(even) {
+  background-color: #2a2d34;
+}
+
+.dashboard-table tr:nth-child(odd) {
+  background-color: #1a1a1a;
+}
+
+.dashboard-button {
+  background: #3B82F6;
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.dashboard-button:hover {
+  background: #2563EB;
+}
+
+.dashboard-code {
+  color: #4ade80;
+  background: #2a2d34;
+  padding: 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: monospace;
+  line-height: 1.5;
+}
+
+.dashboard-card {
+  background: #2a2d34;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.dashboard-card-title {
+  color: white;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.api-section-force-bg {
+  background-color: #23272f !important;
+}
+
+.main-background {
+  background-color: #23272f !important;
+}
+
+.api-endpoints-section {
+  background-color: #23272f !important;
+}

@@ -151,28 +151,93 @@ const HistoryTable: React.FC<{ history: HistoryEntry[] }> = ({ history }) => {
   }
 
   return (
-    <div style={{ overflowX: 'auto', marginTop: '4rem' }}>
-      <h2 style={{ color: 'white', fontSize: '24px', marginBottom: '20px', textAlign: 'center' }}>Historical data by cycle</h2>
-      <table style={{ width: '100%', borderCollapse: 'collapse', color: 'white' }}>
+    <div style={{ overflowX: 'auto', marginTop: '2rem' }}>
+      <table style={{ 
+        width: '100%', 
+        borderCollapse: 'separate',
+        borderSpacing: '0',
+        color: 'white',
+        borderRadius: '8px',
+        overflow: 'hidden'
+      }}>
         <thead>
-          <tr style={{ borderBottom: '1px solid #444', textAlign: 'left' }}>
-            <th style={{ padding: '10px', textAlign: 'center' }}>Cycle</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>Date</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>Active DAL Bakers</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>Baking Power (%)</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>DAL Participation (%)</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>DAL Adoption (%)</th>
+          <tr style={{ 
+            backgroundColor: '#2a2d34',
+            borderBottom: '2px solid #3B82F6'
+          }}>
+            <th style={{ 
+              padding: '16px', 
+              textAlign: 'center',
+              fontWeight: '600',
+              fontSize: '16px'
+            }}>Cycle</th>
+            <th style={{ 
+              padding: '16px', 
+              textAlign: 'center',
+              fontWeight: '600',
+              fontSize: '16px'
+            }}>Date</th>
+            <th style={{ 
+              padding: '16px', 
+              textAlign: 'center',
+              fontWeight: '600',
+              fontSize: '16px'
+            }}>Active DAL Bakers</th>
+            <th style={{ 
+              padding: '16px', 
+              textAlign: 'center',
+              fontWeight: '600',
+              fontSize: '16px'
+            }}>Baking Power (%)</th>
+            <th style={{ 
+              padding: '16px', 
+              textAlign: 'center',
+              fontWeight: '600',
+              fontSize: '16px'
+            }}>DAL Participation (%)</th>
+            <th style={{ 
+              padding: '16px', 
+              textAlign: 'center',
+              fontWeight: '600',
+              fontSize: '16px'
+            }}>DAL Adoption (%)</th>
           </tr>
         </thead>
         <tbody>
-          {history.map((entry) => (
-            <tr key={entry.cycle} style={{ borderBottom: '1px solid #333' }}>
-              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.cycle}</td>
-              <td style={{ padding: '10px', textAlign: 'center' }}>{new Date(entry.timestamp).toLocaleDateString()}</td>
-              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.dal_active_bakers}</td>
-              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.dal_baking_power_percentage.toFixed(1)}%</td>
-              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.dal_participation_percentage.toFixed(1)}%</td>
-              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.dal_adoption_percentage.toFixed(1)}%</td>
+          {history.map((entry, index) => (
+            <tr key={entry.cycle} style={{ 
+              backgroundColor: index % 2 === 0 ? '#1a1a1a' : '#2a2d34'
+            }}>
+              <td style={{ 
+                padding: '16px', 
+                textAlign: 'center',
+                borderBottom: '1px solid #3a3d44'
+              }}>{entry.cycle}</td>
+              <td style={{ 
+                padding: '16px', 
+                textAlign: 'center',
+                borderBottom: '1px solid #3a3d44'
+              }}>{new Date(entry.timestamp).toLocaleDateString()}</td>
+              <td style={{ 
+                padding: '16px', 
+                textAlign: 'center',
+                borderBottom: '1px solid #3a3d44'
+              }}>{entry.dal_active_bakers}</td>
+              <td style={{ 
+                padding: '16px', 
+                textAlign: 'center',
+                borderBottom: '1px solid #3a3d44'
+              }}>{entry.dal_baking_power_percentage.toFixed(1)}%</td>
+              <td style={{ 
+                padding: '16px', 
+                textAlign: 'center',
+                borderBottom: '1px solid #3a3d44'
+              }}>{entry.dal_participation_percentage.toFixed(1)}%</td>
+              <td style={{ 
+                padding: '16px', 
+                textAlign: 'center',
+                borderBottom: '1px solid #3a3d44'
+              }}>{entry.dal_adoption_percentage.toFixed(1)}%</td>
             </tr>
           ))}
         </tbody>
@@ -306,8 +371,21 @@ export default function Home() {
         fontWeight: 'bold',
         marginBottom: '4rem',
         color: 'white',
-        marginTop: '2rem'
+        marginTop: '2rem',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '1rem'
       }}>
+        <img 
+          src="/tezos-logo-white.svg" 
+          alt="Tezos Logo" 
+          style={{ 
+            width: '32px', 
+            height: '32px',
+            marginRight: '10px'
+          }} 
+        />
         Tezos Mainnet DAL-o-meter: Cycle {stats?.cycle || '...'}
       </h1>
 
@@ -352,16 +430,18 @@ export default function Home() {
       {/* History Table */}
       <div style={{
         marginTop: '4rem',
-        padding: '1rem',
-        border: '1px solid #444',
-        borderRadius: '4px',
-        backgroundColor: '#111'
+        padding: '2rem',
+        border: '1px solid #2a2d34',
+        borderRadius: '12px',
+        backgroundColor: '#23272f',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
       }}>
         <h2 style={{
           color: 'white',
-          fontSize: '24px',
-          marginBottom: '20px',
-          textAlign: 'center'
+          fontSize: '28px',
+          marginBottom: '30px',
+          textAlign: 'center',
+          fontWeight: '600'
         }}>
           Cycle History
         </h2>
@@ -374,9 +454,11 @@ export default function Home() {
               background: '#3B82F6',
               border: 'none',
               color: 'white',
-              padding: '10px 20px',
-              borderRadius: '4px',
-              cursor: 'pointer'
+              padding: '12px 24px',
+              borderRadius: '8px',
+              cursor: 'pointer',
+              fontSize: '16px',
+              fontWeight: '500'
             }}
           >
             Load history manually
@@ -384,14 +466,16 @@ export default function Home() {
 
           {debug && (
             <pre style={{
-              marginTop: '10px',
-              padding: '10px',
-              background: '#222',
-              color: '#0f0',
-              borderRadius: '4px',
+              marginTop: '15px',
+              padding: '15px',
+              background: '#2a2d34',
+              color: '#4ade80',
+              borderRadius: '8px',
               textAlign: 'left',
               overflowX: 'auto',
-              maxHeight: '150px'
+              maxHeight: '150px',
+              fontSize: '14px',
+              fontFamily: 'monospace'
             }}>
               {debug}
             </pre>
@@ -399,22 +483,233 @@ export default function Home() {
         </div>
 
         {/* Debug information */}
-        <div style={{ color: 'yellow', marginBottom: '20px', textAlign: 'center' }}>
+        <div style={{ 
+          color: '#fbbf24', 
+          marginBottom: '20px', 
+          textAlign: 'center',
+          fontSize: '16px',
+          fontWeight: '500'
+        }}>
           History length: {history?.length || 0}
         </div>
 
         {/* Raw data display */}
         {history && history.length > 0 && (
           <div style={{ marginTop: '20px', overflowX: 'auto' }}>
-            <h3 style={{ color: 'white', textAlign: 'center', marginBottom: '10px' }}>Raw history data</h3>
-            <pre style={{ color: '#0f0', background: '#222', padding: '10px', borderRadius: '4px' }}>
+            <h3 style={{ 
+              color: 'white', 
+              textAlign: 'center', 
+              marginBottom: '15px',
+              fontSize: '20px',
+              fontWeight: '500'
+            }}>Raw history data</h3>
+            <pre style={{ 
+              color: '#4ade80', 
+              background: '#2a2d34', 
+              padding: '20px', 
+              borderRadius: '8px',
+              fontSize: '14px',
+              fontFamily: 'monospace',
+              lineHeight: '1.5'
+            }}>
               {JSON.stringify(history, null, 2)}
             </pre>
           </div>
         )}
 
         {/* Normal history table */}
-        <HistoryTable history={history} />
+        <div style={{ marginTop: '2rem', overflowX: 'auto' }}>
+          <table style={{ 
+            width: '100%', 
+            borderCollapse: 'separate',
+            borderSpacing: '0',
+            color: 'white',
+            borderRadius: '8px',
+            overflow: 'hidden'
+          }}>
+            <thead>
+              <tr style={{ 
+                backgroundColor: '#2a2d34',
+                borderBottom: '2px solid #3B82F6'
+              }}>
+                <th style={{ 
+                  padding: '16px', 
+                  textAlign: 'center',
+                  fontWeight: '600',
+                  fontSize: '16px'
+                }}>Cycle</th>
+                <th style={{ 
+                  padding: '16px', 
+                  textAlign: 'center',
+                  fontWeight: '600',
+                  fontSize: '16px'
+                }}>Date</th>
+                <th style={{ 
+                  padding: '16px', 
+                  textAlign: 'center',
+                  fontWeight: '600',
+                  fontSize: '16px'
+                }}>Active DAL Bakers</th>
+                <th style={{ 
+                  padding: '16px', 
+                  textAlign: 'center',
+                  fontWeight: '600',
+                  fontSize: '16px'
+                }}>Baking Power (%)</th>
+                <th style={{ 
+                  padding: '16px', 
+                  textAlign: 'center',
+                  fontWeight: '600',
+                  fontSize: '16px'
+                }}>DAL Participation (%)</th>
+                <th style={{ 
+                  padding: '16px', 
+                  textAlign: 'center',
+                  fontWeight: '600',
+                  fontSize: '16px'
+                }}>DAL Adoption (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {history.map((entry, index) => (
+                <tr key={entry.cycle} style={{ 
+                  backgroundColor: index % 2 === 0 ? '#1a1a1a' : '#2a2d34'
+                }}>
+                  <td style={{ 
+                    padding: '16px', 
+                    textAlign: 'center',
+                    borderBottom: '1px solid #3a3d44'
+                  }}>{entry.cycle}</td>
+                  <td style={{ 
+                    padding: '16px', 
+                    textAlign: 'center',
+                    borderBottom: '1px solid #3a3d44'
+                  }}>{new Date(entry.timestamp).toLocaleDateString()}</td>
+                  <td style={{ 
+                    padding: '16px', 
+                    textAlign: 'center',
+                    borderBottom: '1px solid #3a3d44'
+                  }}>{entry.dal_active_bakers}</td>
+                  <td style={{ 
+                    padding: '16px', 
+                    textAlign: 'center',
+                    borderBottom: '1px solid #3a3d44'
+                  }}>{entry.dal_baking_power_percentage.toFixed(1)}%</td>
+                  <td style={{ 
+                    padding: '16px', 
+                    textAlign: 'center',
+                    borderBottom: '1px solid #3a3d44'
+                  }}>{entry.dal_participation_percentage.toFixed(1)}%</td>
+                  <td style={{ 
+                    padding: '16px', 
+                    textAlign: 'center',
+                    borderBottom: '1px solid #3a3d44'
+                  }}>{entry.dal_adoption_percentage.toFixed(1)}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* API Endpoint Section */}
+      <div
+        className="api-endpoints-section"
+        style={{
+          marginTop: '4rem',
+          padding: '2rem',
+          border: '1px solid #2a2d34',
+          borderRadius: '12px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        }}
+      >
+        <h2 style={{
+          color: 'white',
+          fontSize: '28px',
+          marginBottom: '30px',
+          textAlign: 'center',
+          fontWeight: '600'
+        }}>
+          API Endpoints
+        </h2>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <div style={{
+            background: '#2a2d34',
+            padding: '1.5rem',
+            borderRadius: '8px'
+          }}>
+            <h3 style={{
+              color: 'white',
+              fontSize: '20px',
+              fontWeight: '500',
+              marginBottom: '1rem'
+            }}>Current Stats</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <code style={{
+                color: '#4ade80',
+                background: '#1a1a1a',
+                padding: '0.5rem 1rem',
+                borderRadius: '4px',
+                fontFamily: 'monospace'
+              }}>
+                {JSON_URL}
+              </code>
+              <button
+                onClick={() => window.open(JSON_URL, '_blank')}
+                style={{
+                  background: '#3B82F6',
+                  border: 'none',
+                  color: 'white',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontSize: '16px',
+                  fontWeight: '500'
+                }}
+              >
+                Open
+              </button>
+            </div>
+          </div>
+          <div style={{
+            background: '#2a2d34',
+            padding: '1.5rem',
+            borderRadius: '8px'
+          }}>
+            <h3 style={{
+              color: 'white',
+              fontSize: '20px',
+              fontWeight: '500',
+              marginBottom: '1rem'
+            }}>Historical Data</h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <code style={{
+                color: '#4ade80',
+                background: '#1a1a1a',
+                padding: '0.5rem 1rem',
+                borderRadius: '4px',
+                fontFamily: 'monospace'
+              }}>
+                {HISTORY_URL}
+              </code>
+              <button
+                onClick={() => window.open(HISTORY_URL, '_blank')}
+                style={{
+                  background: '#3B82F6',
+                  border: 'none',
+                  color: 'white',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                  fontSize: '16px',
+                  fontWeight: '500'
+                }}
+              >
+                Open
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -7,9 +7,10 @@
     --background-rgb: 0, 0, 0;
 }
 
-body {
-    color: rgb(var(--foreground-rgb));
-    background: rgb(var(--background-rgb));
+html, body {
+    min-height: 100vh;
+    background: linear-gradient(90deg, #0F61FF 0%, #9F329F 100%) !important;
+    color: #fff !important;
 }
 
 /* Styles for GaugeMeter */

@@ -9,7 +9,7 @@ const FAQ: React.FC = () => {
             padding: '2rem',
             border: '1px solid #444',
             borderRadius: '4px',
-            backgroundColor: '#111'
+            backgroundColor: '#23272f'
         }}>
             <h2 style={{
                 color: 'white',

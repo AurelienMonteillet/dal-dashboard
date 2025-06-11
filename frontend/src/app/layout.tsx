@@ -23,7 +23,7 @@ export default function RootLayout({
         {/* Include jQuery to allow for additional functionality later */}
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} main-background`}>{children}</body>
     </html>
   );
 }
