@@ -38,6 +38,25 @@ const SimpleDalGauge: React.FC<SimpleDalGaugeProps> = ({
         fontSize: '14px'
     };
 
+    const infoIconStyle = {
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '16px',
+        height: '16px',
+        borderRadius: '50%',
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        color: 'white',
+        fontSize: '11px',
+        fontWeight: 'bold',
+        marginLeft: '8px',
+        cursor: 'help',
+        borderWidth: '1px',
+        borderStyle: 'solid',
+        borderColor: 'rgba(255, 255, 255, 0.3)',
+        transition: 'all 0.2s ease'
+    };
+
     return (
         <div 
             style={{
@@ -53,8 +72,18 @@ const SimpleDalGauge: React.FC<SimpleDalGaugeProps> = ({
             onMouseEnter={() => setShowTooltip(true)}
             onMouseLeave={() => setShowTooltip(false)}
         >
-            <div style={{ textAlign: 'center', marginBottom: '10px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <span style={{ color: 'white', fontSize: '20px', fontWeight: 'bold' }}>{label}</span>
+                {tooltip && (
+                    <span 
+                        style={{
+                            ...infoIconStyle,
+                            ...(showTooltip ? { backgroundColor: 'rgba(59, 130, 246, 0.3)', borderColor: 'rgba(59, 130, 246, 0.5)' } : {})
+                        }}
+                    >
+                        i
+                    </span>
+                )}
             </div>
 
             {/* SVG gauge container */}
