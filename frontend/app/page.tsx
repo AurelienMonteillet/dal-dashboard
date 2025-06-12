@@ -285,7 +285,9 @@ export default function Home() {
             label={`${stats?.dal_baking_power_percentage?.toFixed(1) || '0'}%`}
             description="Baking Power"
             maxValue={100}
-            tooltip={`Percentage of total Tezos staking power controlled by bakers who have activated DAL. Currently, ${stats?.dal_baking_power_percentage?.toFixed(1) || '0'}% of the total baking power is controlled by DAL bakers.`}
+            threshold={67}
+            showActivationStatus={true}
+            tooltip={`Percentage of total Tezos staking power controlled by bakers who have activated DAL. Currently, ${stats?.dal_baking_power_percentage?.toFixed(1) || '0'}% of the total baking power is controlled by DAL bakers. DAL is activated when this percentage exceeds 67%.`}
           />
           <SimpleDalGauge
             value={participationPercentage}
