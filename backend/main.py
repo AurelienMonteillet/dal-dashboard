@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 # GitHub Pages URL and local fallback
 GITHUB_PAGES_URL = "https://aurelienmonteillet.github.io/dal-dashboard/dal_stats.json"
 LOCAL_RESULTS_FILE = Path("/opt/dal_dashboard/backend/data/dal_stats.json")
+GITHUB_PAGES_HISTORY_URL = "https://aurelienmonteillet.github.io/dal-dashboard/dal_stats_history.json"
 
 app = FastAPI(
     title="DAL-o-meter API",
@@ -112,4 +113,34 @@ async def health_check():
         return JSONResponse({
             "status": "unhealthy",
             "error": "Could not read DAL statistics"
-        }, status_code=500) 
+        }, status_code=500)
+
+@app.get("/api/history")
+async def get_history():
+    """
+    Get the complete DAL statistics history from GitHub Pages.
+    """
+    try:
+        response = requests.get(GITHUB_PAGES_HISTORY_URL, timeout=5)
+        response.raise_for_status()
+        return response.json()
+    except Exception as e:
+        logger.error(f"Error fetching DAL history: {e}")
+        raise HTTPException(status_code=500, detail="Error fetching DAL history")
+
+@app.get("/api/cycle/{cycle}")
+async def get_cycle(cycle: int):
+    """
+    Get DAL statistics for a specific cycle from GitHub Pages history.
+    """
+    try:
+        response = requests.get(GITHUB_PAGES_HISTORY_URL, timeout=5)
+        response.raise_for_status()
+        history = response.json()
+        for entry in history:
+            if entry.get("cycle") == cycle:
+                return entry
+        raise HTTPException(status_code=404, detail="Cycle not found")
+    except Exception as e:
+        logger.error(f"Error fetching cycle {cycle}: {e}")
+        raise HTTPException(status_code=500, detail="Error fetching cycle data") 
