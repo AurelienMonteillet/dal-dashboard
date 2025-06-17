@@ -98,36 +98,55 @@ async function fetchDalHistory(): Promise<HistoryEntry[]> {
 
 // Component to display the history table
 const HistoryTable: React.FC<{ history: HistoryEntry[] }> = ({ history }) => {
+  const [displayCount, setDisplayCount] = useState(10);
+
   if (!history || history.length === 0) {
-    return <div style={{ color: 'white', textAlign: 'center', padding: '20px' }}>No historical data available.</div>;
+    return <div className="text-white text-center py-5">No historical data available.</div>;
   }
 
+  const displayedHistory = history.slice(0, displayCount);
+  const hasMore = displayCount < history.length;
+
   return (
-    <div style={{ overflowX: 'auto', marginTop: '4rem' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse', color: 'white' }}>
-        <thead>
-          <tr style={{ borderBottom: '1px solid #444', textAlign: 'left' }}>
-            <th style={{ padding: '10px', textAlign: 'center' }}>Cycle</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>Date</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>Active DAL Bakers</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>Baking Power (%)</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>DAL Participation (%)</th>
-            <th style={{ padding: '10px', textAlign: 'center' }}>DAL Adoption (%)</th>
-          </tr>
-        </thead>
-        <tbody>
-          {history.map((entry) => (
-            <tr key={entry.cycle} style={{ borderBottom: '1px solid #333' }}>
-              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.cycle}</td>
-              <td style={{ padding: '10px', textAlign: 'center' }}>{new Date(entry.timestamp).toLocaleDateString()}</td>
-              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.dal_active_bakers}</td>
-              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.dal_baking_power_percentage.toFixed(1)}%</td>
-              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.dal_participation_percentage.toFixed(1)}%</td>
-              <td style={{ padding: '10px', textAlign: 'center' }}>{entry.dal_adoption_percentage.toFixed(1)}%</td>
+    <div className="flex flex-col items-center">
+      <div className="w-full overflow-x-auto">
+        <table className="w-full border-collapse text-white">
+          <thead>
+            <tr className="border-b border-gray-600">
+              <th className="p-3 text-center">Cycle</th>
+              <th className="p-3 text-center">Date</th>
+              <th className="p-3 text-center">Active DAL Bakers</th>
+              <th className="p-3 text-center">Baking Power (%)</th>
+              <th className="p-3 text-center">DAL Participation (%)</th>
+              <th className="p-3 text-center">DAL Adoption (%)</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {displayedHistory.map((entry) => (
+              <tr key={entry.cycle} className="border-b border-gray-700 hover:bg-gray-800/50 transition-colors">
+                <td className="p-3 text-center">{entry.cycle}</td>
+                <td className="p-3 text-center">{new Date(entry.timestamp).toLocaleDateString()}</td>
+                <td className="p-3 text-center">{entry.dal_active_bakers}</td>
+                <td className="p-3 text-center">{entry.dal_baking_power_percentage.toFixed(1)}%</td>
+                <td className="p-3 text-center">{entry.dal_participation_percentage.toFixed(1)}%</td>
+                <td className="p-3 text-center">{entry.dal_adoption_percentage.toFixed(1)}%</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      
+      {hasMore && (
+        <button
+          onClick={() => setDisplayCount(prev => prev + 10)}
+          className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+        >
+          Show More
+          <span className="text-sm opacity-75">
+            ({displayCount}/{history.length})
+          </span>
+        </button>
+      )}
     </div>
   );
 };
@@ -251,28 +270,12 @@ export default function Home() {
       flexDirection: 'column',
       padding: '2rem'
     }}>
-      <h1 style={{
-        textAlign: 'center',
-        fontSize: '32px',
-        fontWeight: 'bold',
-        marginBottom: '4rem',
-        color: 'white',
-        marginTop: '2rem'
-      }}>
+      <h1 className="text-center text-2xl sm:text-3xl font-bold mb-8 sm:mb-16 text-white mt-8">
         Tezos Mainnet DAL-o-meter: Cycle {stats?.cycle || '...'}
       </h1>
 
-      <div style={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'center',
-        paddingTop: '2rem'
-      }}>
-        <div style={{
-          display: 'flex',
-          flexDirection: 'row',
-          width: '100%'
-        }}>
+      <div className="flex items-start justify-center pt-8">
+        <div className="flex flex-wrap w-full gap-y-8">
           <SimpleDalGauge
             value={stats?.dal_active_bakers || 0}
             label={`${stats?.dal_active_bakers || 0}/${stats?.total_bakers || 0}`}
@@ -320,24 +323,11 @@ Calculated as: ((total bakers - DAL inactive bakers - unclassified bakers - non-
         </div>
       </div>
 
-      {/* History Table */}
-      <div style={{
-        marginTop: '4rem',
-        padding: '2rem',
-        border: '1px solid #444',
-        borderRadius: '4px',
-        backgroundColor: '#23272f'
-      }}>
-        <h2 style={{
-          color: 'white',
-          fontSize: '24px',
-          marginBottom: '20px',
-          textAlign: 'center'
-        }}>
+      {/* History Table Section */}
+      <div className="mt-16 p-8 border border-gray-600 rounded-lg bg-[#23272f]">
+        <h2 className="text-white text-2xl mb-8 text-center">
           Cycle History
         </h2>
-
-        {/* Normal history table */}
         <HistoryTable history={history} />
       </div>
 
