@@ -98,10 +98,11 @@ const SimpleDalGauge: React.FC<SimpleDalGaugeProps> = ({
                 {showActivationStatus && threshold && (
                     <span style={{ 
                         marginLeft: '6px', 
-                        fontSize: '14px',
-                        opacity: '0.8'
+                        fontSize: '12px',
+                        color: isActive ? '#22c55e' : 'rgba(255,255,255,0.5)',
+                        animation: isActive ? 'pulse 2s ease-in-out infinite' : 'none'
                     }}>
-                        {isActive ? '✅' : '⚠️'}
+                        {isActive ? '●' : '○'}
                     </span>
                 )}
                 
@@ -144,12 +145,12 @@ const SimpleDalGauge: React.FC<SimpleDalGaugeProps> = ({
                             const pos = getThresholdPosition(threshold);
                             return (
                                 <g>
-                                    {/* Ligne pointillée du centre vers l'arc */}
+                                    {/* Ligne pointillée du centre vers l'extérieur */}
                                     <line
                                         x1="50"
                                         y1="50"
-                                        x2={pos.x}
-                                        y2={pos.y}
+                                        x2={pos.x + 15 * Math.cos((pos.angle * Math.PI) / 180)}
+                                        y2={pos.y - 15 * Math.sin((pos.angle * Math.PI) / 180)}
                                         stroke="white"
                                         strokeWidth="1.5"
                                         strokeDasharray="4,3"

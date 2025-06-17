@@ -54,3 +54,13 @@ html, body {
     font-size: 0.5em;
     opacity: 0.8;
 }
+
+/* Animation pulse pour l'indicateur DAL actif */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+}
