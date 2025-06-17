@@ -32,8 +32,10 @@ export default function RootLayout({
       >
         <JQueryLoader />
         <header style={{ display: 'flex', alignItems: 'center', padding: '1rem 2rem', position: 'relative' }}>
-          <img src="/tezos-logo-white.svg" alt="Tezos Logo" style={{ height: '40px', marginRight: '1rem' }} />
-          <span style={{ fontWeight: 'normal', fontSize: '2rem', letterSpacing: '0.05em', fontFamily: 'inherit' }}>Tezos</span>
+          <a href="https://tezos.com" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'white' }}>
+            <img src="/tezos-logo-white.svg" alt="Tezos Logo" style={{ height: '40px', marginRight: '1rem' }} />
+            <span style={{ fontWeight: 'normal', fontSize: '2rem', letterSpacing: '0.05em', fontFamily: 'inherit' }}>Tezos</span>
+          </a>
         </header>
         {children}
         <footer style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 2rem', fontSize: '1rem', background: 'transparent', color: 'white', marginTop: '2rem' }}>
