@@ -1,10 +1,10 @@
 {
-  "timestamp": "2025-06-23T18:35:52.633621",
+  "timestamp": "2025-06-24T00:35:38.967949",
   "cycle": 910,
   "total_bakers": 280,
   "dal_active_bakers": 171,
-  "dal_inactive_bakers": 90,
-  "unclassified_bakers": 10,
+  "dal_inactive_bakers": 91,
+  "unclassified_bakers": 9,
   "non_attesting_bakers": 9,
   "dal_baking_power_percentage": 75.33097737455778,
   "total_baking_power": 409595155353171,
