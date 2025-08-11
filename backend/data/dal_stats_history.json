@@ -1,11 +1,11 @@
 [
   {
-    "timestamp": "2025-08-10T18:42:31.051096",
+    "timestamp": "2025-08-11T00:43:20.639057",
     "cycle": 958,
-    "dal_active_bakers": 179,
-    "dal_baking_power_percentage": 86.74352845591636,
-    "dal_participation_percentage": 68.84615384615384,
-    "dal_adoption_percentage": 67.54716981132076
+    "dal_active_bakers": 180,
+    "dal_baking_power_percentage": 86.64545437245987,
+    "dal_participation_percentage": 69.23076923076923,
+    "dal_adoption_percentage": 67.41573033707866
   },
   {
     "timestamp": "2025-08-10T06:42:05.352092",
