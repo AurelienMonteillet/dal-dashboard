@@ -1,5 +1,13 @@
 [
   {
+    "timestamp": "2025-08-16T12:34:06.130069",
+    "cycle": 964,
+    "dal_active_bakers": 181,
+    "dal_baking_power_percentage": 86.8241029993733,
+    "dal_participation_percentage": 69.08396946564885,
+    "dal_adoption_percentage": 68.8212927756654
+  },
+  {
     "timestamp": "2025-08-16T06:43:46.249077",
     "cycle": 963,
     "dal_active_bakers": 179,
