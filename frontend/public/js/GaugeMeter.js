@@ -37,6 +37,15 @@
       t
     );
     return this.each(function () {
+      function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/\"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
       function getThemeColor(e) {
         var t = '#2C94E0';
         return e || (e = 1e-14),
@@ -231,25 +240,26 @@
         settings.text !== null &&
         settings.text !== undefined
       ) {
+        var safeText = escapeHtml(settings.text);
         if (
           settings.append !== '' &&
           settings.append !== null &&
           settings.append !== undefined
         ) {
-          r = settings.text + '<u>' + settings.append + '</u>';
+          r = safeText + '<u>' + escapeHtml(settings.append) + '</u>';
         } else {
-          r = settings.text;
+          r = safeText;
         }
         if (
           settings.prepend !== '' &&
           settings.prepend !== null &&
           settings.prepend !== undefined
         ) {
-          r = '<s>' + settings.prepend + '</s>' + r;
+          r = '<s>' + escapeHtml(settings.prepend) + '</s>' + r;
         }
       } else {
         if (defaults.showvalue === true || settings.showvalue === true) {
-          r = '<output>' + settings.used + '</output>';
+          r = '<output>' + String(settings.used) + '</output>';
         } else {
           r = '<output>' + c.toString() + '</output>';
         }
@@ -258,7 +268,7 @@
           settings.prepend !== null &&
           settings.prepend !== undefined
         ) {
-          r = '<s>' + settings.prepend + '</s>' + r;
+          r = '<s>' + escapeHtml(settings.prepend) + '</s>' + r;
         }
 
         if (
@@ -266,7 +276,7 @@
           settings.append !== null &&
           settings.append !== undefined
         ) {
-          r = r + '<u>' + settings.append + '</u>';
+          r = r + '<u>' + escapeHtml(settings.append) + '</u>';
         }
       }
 
