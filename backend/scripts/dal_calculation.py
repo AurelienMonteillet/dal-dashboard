@@ -128,7 +128,7 @@ class DALCalculator:
             True if DAL is activated, False if not, None if cannot determine
         """
         rights = self._fetch_json(
-            f"{self.api_url}/rights?cycle={cycle}&baker={delegate['address']}&status=realized&limit=300&type=endorsing"
+            f"{self.api_url}/rights?cycle={cycle}&baker={delegate['address']}&status=realized&limit=300&type=attestation"
         )
         if not rights:
             return None
