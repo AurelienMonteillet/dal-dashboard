@@ -93,7 +93,18 @@
         }
         var child = t.children('span');
         if (child.length !== 0) {
-          child.html(r).css({ color: fgcolor });
+          child.empty().css({ color: fgcolor });
+          if (safePrependVal) {
+            $('<s></s>').text(safePrependVal).appendTo(child);
+          }
+          if (isTextMode) {
+            $('<span></span>').text(r).appendTo(child);
+          } else {
+            $('<output></output>').text(r).appendTo(child);
+          }
+          if (safeAppendVal) {
+            $('<u></u>').text(safeAppendVal).appendTo(child);
+          }
           return;
         }
         if (settings.text_size <= 0.0 || Number.isNaN(settings.text_size)) {
@@ -102,14 +113,24 @@
         if (settings.text_size > 0.5) {
           settings.text_size = 0.5;
         }
-        $('<span></span>')
+        var container = $('<span></span>')
           .appendTo(t)
-          .html(r)
           .css({
             'line-height': settings.size + 'px',
             'font-size': settings.text_size * settings.size + 'px',
             color: fgcolor
           });
+        if (safePrependVal) {
+          $('<s></s>').text(safePrependVal).appendTo(container);
+        }
+        if (isTextMode) {
+          $('<span></span>').text(r).appendTo(container);
+        } else {
+          $('<output></output>').text(r).appendTo(container);
+        }
+        if (safeAppendVal) {
+          $('<u></u>').text(safeAppendVal).appendTo(container);
+        }
       }
       /* Get data attributes as options from div tag. Fall back to defaults when not exists. */
       function getDataAttr(t) {
@@ -235,48 +256,25 @@
       if (c < 0) c = 0;
       if (c > 100) c = 100;
 
-      if (
+      var isTextMode = (
         settings.text !== '' &&
         settings.text !== null &&
         settings.text !== undefined
-      ) {
-        var safeText = escapeHtml(settings.text);
-        if (
-          settings.append !== '' &&
-          settings.append !== null &&
-          settings.append !== undefined
-        ) {
-          r = safeText + '<u>' + escapeHtml(settings.append) + '</u>';
-        } else {
-          r = safeText;
-        }
-        if (
-          settings.prepend !== '' &&
-          settings.prepend !== null &&
-          settings.prepend !== undefined
-        ) {
-          r = '<s>' + escapeHtml(settings.prepend) + '</s>' + r;
-        }
+      );
+      var safePrependVal = (
+        settings.prepend !== '' && settings.prepend !== null && settings.prepend !== undefined
+      ) ? escapeHtml(settings.prepend) : '';
+      var safeAppendVal = (
+        settings.append !== '' && settings.append !== null && settings.append !== undefined
+      ) ? escapeHtml(settings.append) : '';
+
+      if (isTextMode) {
+        r = escapeHtml(settings.text);
       } else {
         if (defaults.showvalue === true || settings.showvalue === true) {
-          r = '<output>' + String(settings.used) + '</output>';
+          r = String(settings.used);
         } else {
-          r = '<output>' + c.toString() + '</output>';
-        }
-        if (
-          settings.prepend !== '' &&
-          settings.prepend !== null &&
-          settings.prepend !== undefined
-        ) {
-          r = '<s>' + escapeHtml(settings.prepend) + '</s>' + r;
-        }
-
-        if (
-          settings.append !== '' &&
-          settings.append !== null &&
-          settings.append !== undefined
-        ) {
-          r = r + '<u>' + escapeHtml(settings.append) + '</u>';
+          r = c.toString();
         }
       }
 
