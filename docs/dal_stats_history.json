@@ -8,20 +8,20 @@
     "dal_adoption_percentage": 0.0
   },
   {
-    "timestamp": "2025-11-07T11:44:02.571156",
+    "timestamp": "2025-11-07T13:09:50.917656",
     "cycle": 1045,
-    "dal_active_bakers": 0,
-    "dal_baking_power_percentage": 0.0,
-    "dal_participation_percentage": 0.0,
-    "dal_adoption_percentage": 0.0
+    "dal_active_bakers": 247,
+    "dal_baking_power_percentage": 99.76844940549162,
+    "dal_participation_percentage": 93.56060606060606,
+    "dal_adoption_percentage": 93.56060606060606
   },
   {
-    "timestamp": "2025-11-07T11:41:52.222880",
+    "timestamp": "2025-11-07T13:18:19.187562",
     "cycle": 1044,
-    "dal_active_bakers": 0,
-    "dal_baking_power_percentage": 0.0,
-    "dal_participation_percentage": 0.0,
-    "dal_adoption_percentage": 0.0
+    "dal_active_bakers": 239,
+    "dal_baking_power_percentage": 99.63870573178183,
+    "dal_participation_percentage": 90.53030303030303,
+    "dal_adoption_percentage": 90.53030303030303
   },
   {
     "timestamp": "2025-11-06T18:07:41.767302",
