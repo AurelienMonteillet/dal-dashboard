@@ -1,6 +1,6 @@
 [
   {
-    "timestamp": "2025-11-08T06:04:38.800689",
+    "timestamp": "2025-11-08T12:04:40.292742",
     "cycle": 1047,
     "dal_active_bakers": 0,
     "dal_baking_power_percentage": 0.0,
@@ -16,20 +16,20 @@
     "dal_adoption_percentage": 0.0
   },
   {
-    "timestamp": "2025-11-08T11:12:53.281542",
+    "timestamp": "2025-11-08T11:53:43.242035",
     "cycle": 1045,
-    "dal_active_bakers": 0,
-    "dal_baking_power_percentage": 0.0,
-    "dal_participation_percentage": 0.0,
-    "dal_adoption_percentage": 0.0
+    "dal_active_bakers": 247,
+    "dal_baking_power_percentage": 99.63487199749295,
+    "dal_participation_percentage": 93.56060606060606,
+    "dal_adoption_percentage": 93.56060606060606
   },
   {
-    "timestamp": "2025-11-07T17:12:43.513080",
+    "timestamp": "2025-11-08T11:26:41.689532",
     "cycle": 1044,
-    "dal_active_bakers": 0,
-    "dal_baking_power_percentage": 0.0,
-    "dal_participation_percentage": 0.0,
-    "dal_adoption_percentage": 0.0
+    "dal_active_bakers": 247,
+    "dal_baking_power_percentage": 99.63473237352652,
+    "dal_participation_percentage": 93.56060606060606,
+    "dal_adoption_percentage": 93.56060606060606
   },
   {
     "timestamp": "2025-11-06T18:07:41.767302",
