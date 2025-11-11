@@ -1,0 +1,5 @@
+# Ignorer le fichier de configuration réel
+config.json
+
+# Ne pas ignorer le fichier d'exemple
+!config.example.json 

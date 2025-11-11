@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-06-17T14:51:20.899989",
+  "data": {
+    "tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9": {
+      "online": false,
+      "cycle": 904,
+      "last_checked": "2025-06-17T14:51:18.708007"
+    },
+    "tz1RCFbaphZ2THJQ3JmKHWiX3iHhk6PQ3SpB": {
+      "online": false,
+      "cycle": 904,
+      "last_checked": "2025-06-17T14:51:19.899819"
+    }
+  }
+}

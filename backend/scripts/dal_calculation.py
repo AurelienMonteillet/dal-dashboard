@@ -32,6 +32,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='Calculate DAL statistics for Tezos network')
     parser.add_argument('--network', type=str, default='mainnet', help='Network to analyze (default: mainnet)')
     parser.add_argument('--output-dir', type=str, help='Output directory for data files')
+    parser.add_argument('--cycle', type=int, help='Specific cycle to analyze (default: current cycle)')
     return parser.parse_args()
 
 @dataclass
@@ -62,11 +63,12 @@ class DALCalculator:
             network: Tezos network to use (default: mainnet)
         """
         self.network = network
-        self.rpc_url = f"https://rpc.tzkt.io/{network}"
+        self.rpc_url = "https://rpc.tzkt.io/mainnet"  # Using TzKT RPC for dal_participation
         self.api_url = f"https://api.{network}.tzkt.io/v1"
         self.cache = {}
         self.cache_duration = timedelta(minutes=5)
         self._session = requests.Session()
+        self._cycle_bounds_cache = {}
 
     def _fetch_json(self, url: str) -> Optional[dict]:
         """
@@ -97,8 +99,32 @@ class DALCalculator:
         Returns:
             Current cycle number
         """
-        level_infos = self._fetch_json(f"{self.rpc_url}/chains/main/blocks/head/helpers/current_level")
-        return level_infos["cycle"]
+        head = self._fetch_json(f"{self.api_url}/head")
+        return head["cycle"]
+    
+    def get_cycle_bounds(self, cycle: int) -> Optional[Tuple[int, int]]:
+        """
+        Get the first and last levels of a given cycle using TzKT API.
+        
+        Args:
+            cycle: Cycle number
+            
+        Returns:
+            (firstLevel, lastLevel) or None on failure
+        """
+        if cycle in self._cycle_bounds_cache:
+            return self._cycle_bounds_cache[cycle]
+        
+        cycle_info = self._fetch_json(f"{self.api_url}/cycles/{cycle}")
+        if not cycle_info:
+            return None
+        
+        try:
+            bounds = (int(cycle_info["firstLevel"]), int(cycle_info["lastLevel"]))
+            self._cycle_bounds_cache[cycle] = bounds
+            return bounds
+        except (KeyError, ValueError):
+            return None
 
     def get_delegate_stake(self, delegate: Dict, cycle: int) -> float:
         """
@@ -111,14 +137,36 @@ class DALCalculator:
         Returns:
             Delegate's baking power
         """
+        # Try to get baking power from rewards endpoint
         rights = self._fetch_json(f"{self.api_url}/rewards/bakers/{delegate['address']}?cycle={cycle}")
-        if rights and rights[0]:
-            return rights[0]["bakingPower"]
-        return 0
+        if rights:
+            try:
+                if isinstance(rights, list) and rights:
+                    bp = rights[0].get("bakingPower", 0)
+                    if bp and bp > 0:
+                        return float(bp)
+                elif isinstance(rights, dict):
+                    bp = rights.get("bakingPower", 0)
+                    if bp and bp > 0:
+                        return float(bp)
+            except (KeyError, ValueError, TypeError):
+                pass
+        
+        # Fallback: get staking balance at cycle start
+        bounds = self.get_cycle_bounds(cycle)
+        if bounds:
+            first_level, _ = bounds
+            delegate_info = self._fetch_json(f"{self.api_url}/delegates/{delegate['address']}?at={first_level}")
+            if delegate_info:
+                staking_balance = delegate_info.get("stakingBalance", 0)
+                if staking_balance:
+                    return float(staking_balance)
+        
+        return 0.0
 
     def check_dal_activation(self, delegate: Dict, cycle: int) -> Optional[bool]:
         """
-        Check if a delegate has activated DAL.
+        Check if a delegate has activated DAL using the dal_participation RPC endpoint.
         
         Args:
             delegate: Delegate information
@@ -127,25 +175,37 @@ class DALCalculator:
         Returns:
             True if DAL is activated, False if not, None if cannot determine
         """
-        rights = self._fetch_json(
-            f"{self.api_url}/rights?cycle={cycle}&baker={delegate['address']}&status=realized&limit=300&type=attestation"
-        )
-        if not rights:
+        baker_address = delegate['address']
+        
+        # Get cycle bounds
+        bounds = self.get_cycle_bounds(cycle)
+        if not bounds:
+            logger.debug(f"Could not get cycle bounds for cycle {cycle}")
             return None
-
-        for endorsement in rights[:300]:
-            try:
-                attestation_rights = self._fetch_json(
-                    f"{self.rpc_url}/chains/main/blocks/{endorsement['level'] - 1}/helpers/attestation_rights?delegate={delegate['address']}"
-                )
-                if attestation_rights[0]["delegates"][0]["first_slot"] < 512:
-                    block_data = self._fetch_json(f"{self.rpc_url}/chains/main/blocks/{endorsement['level']}")
-                    for op in block_data["operations"][0]:
-                        if op["contents"][0]["metadata"]["delegate"] == delegate["address"]:
-                            return op["contents"][0]["kind"] == "attestation_with_dal"
-            except Exception as e:
-                logger.debug(f"Could not verify attestation for {delegate['address']}: {e}")
-        return None
+        
+        first_level, last_level = bounds
+        
+        # Use before-last level to avoid reset (dal_participation resets at last block)
+        check_level = last_level - 1
+        
+        try:
+            # Query RPC dal_participation endpoint
+            url = f"{self.rpc_url}/chains/main/blocks/{check_level}/context/delegates/{baker_address}/dal_participation"
+            response = self._session.get(url, timeout=15)
+            
+            if response.status_code != 200:
+                logger.debug(f"Could not get dal_participation for {baker_address}: HTTP {response.status_code}")
+                return None
+            
+            data = response.json()
+            attested_slots = data.get('delegate_attested_dal_slots', 0)
+            
+            # If attested_slots > 0, the baker has DAL activated
+            return attested_slots > 0
+            
+        except Exception as e:
+            logger.debug(f"Error checking DAL activation for {baker_address}: {e}")
+            return None
 
     def process_delegate(self, delegate: Dict, cycle: int) -> Tuple[Dict, float, Optional[bool]]:
         """
@@ -162,23 +222,25 @@ class DALCalculator:
         dal_status = self.check_dal_activation(delegate, cycle)
         return delegate, stake, dal_status
 
-    def calculate_stats(self, verbose: bool = False) -> DALStats:
+    def calculate_stats(self, verbose: bool = False, cycle: Optional[int] = None) -> DALStats:
         """
-        Calculate DAL statistics for the current cycle.
+        Calculate DAL statistics for a specific cycle or the current cycle.
         
         Args:
             verbose: Whether to log verbose progress information
+            cycle: Specific cycle to analyze (default: current cycle)
             
         Returns:
             DALStats object containing current statistics
         """
-        cache_key = f"stats_{self.network}"
+        if cycle is None:
+            cycle = self.get_current_cycle()
+        
+        cache_key = f"stats_{self.network}_{cycle}"
         if cache_key in self.cache:
             cached_stats, timestamp = self.cache[cache_key]
             if datetime.now() - timestamp < self.cache_duration:
                 return cached_stats
-
-        cycle = self.get_current_cycle()
         if verbose:
             logger.info(f"Processing cycle {cycle}")
             
@@ -357,7 +419,7 @@ def main():
     
     try:
         # Calculate stats with verbose output
-        stats = calculator.calculate_stats(verbose=True)
+        stats = calculator.calculate_stats(verbose=True, cycle=args.cycle)
         
         # Save results and update history
         save_results_and_update_history(stats, results_file, history_file)

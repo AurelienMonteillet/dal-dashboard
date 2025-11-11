@@ -1,0 +1,20 @@
+{
+    "tezos": {
+        "network": "mainnet",
+        "rpc_base": "https://rpc.tzkt.io",
+        "api_base": "https://api.mainnet.tzkt.io/v1"
+    },
+    "dal": {
+        "bootstrap_url": "http://example-bootstrap-url:9090",
+        "update_interval": 3600,
+        "rate_limit_delay": 1
+    },
+    "output": {
+        "json_path": "../data/dal_status.json",
+        "backup_path": "../data/backups"
+    },
+    "logging": {
+        "level": "INFO",
+        "file": "../logs/dal_checker.log"
+    }
+} 

@@ -1,0 +1,30 @@
+{
+  "timestamp": "2025-06-17T14:53:11.881864",
+  "data": {
+    "tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9": {
+      "online": false,
+      "cycle": 904,
+      "last_checked": "2025-06-17T14:53:06.085273"
+    },
+    "tz1RCFbaphZ2THJQ3JmKHWiX3iHhk6PQ3SpB": {
+      "online": false,
+      "cycle": 904,
+      "last_checked": "2025-06-17T14:53:07.284988"
+    },
+    "tz1irJKkXS2DBWkU1NnmFQx1c1L7pbGg4yhk": {
+      "online": false,
+      "cycle": 904,
+      "last_checked": "2025-06-17T14:53:08.479933"
+    },
+    "tz1V4qCyvPKZ5VuqNcK3sD5Fm5h1qiWVjZAm": {
+      "online": false,
+      "cycle": 904,
+      "last_checked": "2025-06-17T14:53:09.675114"
+    },
+    "tz1Kt4P8BCaP93AEV4eA7gmpRryWt5hznjCP": {
+      "online": false,
+      "cycle": 904,
+      "last_checked": "2025-06-17T14:53:10.881630"
+    }
+  }
+}
