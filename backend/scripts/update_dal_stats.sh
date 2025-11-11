@@ -20,9 +20,13 @@ if [ "$CURRENT_BRANCH" != "main" ]; then
     git checkout main
 fi
 
-# Run the calculation script
-echo "Running DAL calculation script..."
-python backend/scripts/dal_calculation.py --network mainnet --output-dir backend/data
+# Get current cycle and calculate for previous cycle (current is not yet complete)
+CURRENT_CYCLE=$(curl -s "https://api.mainnet.tzkt.io/v1/head" | jq -r '.cycle')
+PREVIOUS_CYCLE=$((CURRENT_CYCLE - 1))
+
+# Run the calculation script for the previous cycle
+echo "Running DAL calculation script for cycle $PREVIOUS_CYCLE..."
+python backend/scripts/dal_calculation.py --network mainnet --output-dir backend/data --cycle $PREVIOUS_CYCLE
 
 # Check if there are changes to commit
 if git diff --quiet backend/data/dal_stats.json; then
