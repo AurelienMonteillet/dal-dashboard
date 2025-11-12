@@ -1,5 +1,13 @@
 [
   {
+    "timestamp": "2025-11-11T06:49:44+00:00",
+    "cycle": 1050,
+    "dal_active_bakers": 195,
+    "dal_baking_power_percentage": 82.7527163026569,
+    "dal_participation_percentage": 77.07509881422925,
+    "dal_adoption_percentage": 77.07509881422925
+  },
+  {
     "timestamp": "2025-11-12T06:03:11.393108",
     "cycle": 1049,
     "dal_active_bakers": 196,
@@ -32,10 +40,10 @@
     "dal_adoption_percentage": 77.07509881422925
   },
   {
-    "timestamp": "2025-11-10T15:14:20.406582",
+    "timestamp": "2025-11-06T05:17:52+00:00",
     "cycle": 1045,
     "dal_active_bakers": 192,
-    "dal_baking_power_percentage": 81.90853599364931,
+    "dal_baking_power_percentage": 81.92447388139412,
     "dal_participation_percentage": 75.8893280632411,
     "dal_adoption_percentage": 75.8893280632411
   },
@@ -56,28 +64,28 @@
     "dal_adoption_percentage": 77.07509881422925
   },
   {
-    "timestamp": "2025-11-04T01:41:51.262628",
+    "timestamp": "2025-11-03T05:08:48+00:00",
     "cycle": 1042,
-    "dal_active_bakers": 186,
-    "dal_baking_power_percentage": 86.76382212864702,
-    "dal_participation_percentage": 74.4,
-    "dal_adoption_percentage": 72.94117647058823
+    "dal_active_bakers": 193,
+    "dal_baking_power_percentage": 81.87765072136047,
+    "dal_participation_percentage": 76.28458498023716,
+    "dal_adoption_percentage": 76.28458498023716
   },
   {
-    "timestamp": "2025-11-03T01:38:19.152316",
+    "timestamp": "2025-11-02T05:02:48+00:00",
     "cycle": 1041,
-    "dal_active_bakers": 185,
-    "dal_baking_power_percentage": 87.54494453091887,
-    "dal_participation_percentage": 74.29718875502009,
-    "dal_adoption_percentage": 71.98443579766537
+    "dal_active_bakers": 191,
+    "dal_baking_power_percentage": 82.63331733457196,
+    "dal_participation_percentage": 75.49407114624506,
+    "dal_adoption_percentage": 75.49407114624506
   },
   {
-    "timestamp": "2025-11-02T01:34:14.892684",
+    "timestamp": "2025-11-01T04:55:48+00:00",
     "cycle": 1040,
-    "dal_active_bakers": 184,
-    "dal_baking_power_percentage": 87.40834413773551,
-    "dal_participation_percentage": 73.30677290836654,
-    "dal_adoption_percentage": 70.76923076923077
+    "dal_active_bakers": 192,
+    "dal_baking_power_percentage": 82.59738252962735,
+    "dal_participation_percentage": 75.8893280632411,
+    "dal_adoption_percentage": 75.8893280632411
   },
   {
     "timestamp": "2025-11-01T01:39:51.709064",
