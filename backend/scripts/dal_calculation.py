@@ -102,6 +102,24 @@ class DALCalculator:
         head = self._fetch_json(f"{self.api_url}/head")
         return head["cycle"]
     
+    def get_cycle_info(self, cycle: int) -> Optional[Dict]:
+        """
+        Get cycle information from TzKT API (cached).
+        
+        Args:
+            cycle: Cycle number
+            
+        Returns:
+            Cycle info dict or None on failure
+        """
+        if cycle in self._cycle_bounds_cache:
+            return self._cycle_bounds_cache[cycle]
+        
+        cycle_info = self._fetch_json(f"{self.api_url}/cycles/{cycle}")
+        if cycle_info:
+            self._cycle_bounds_cache[cycle] = cycle_info
+        return cycle_info
+    
     def get_cycle_bounds(self, cycle: int) -> Optional[Tuple[int, int]]:
         """
         Get the first and last levels of a given cycle using TzKT API.
@@ -112,16 +130,12 @@ class DALCalculator:
         Returns:
             (firstLevel, lastLevel) or None on failure
         """
-        if cycle in self._cycle_bounds_cache:
-            return self._cycle_bounds_cache[cycle]
-        
-        cycle_info = self._fetch_json(f"{self.api_url}/cycles/{cycle}")
+        cycle_info = self.get_cycle_info(cycle)
         if not cycle_info:
             return None
         
         try:
             bounds = (int(cycle_info["firstLevel"]), int(cycle_info["lastLevel"]))
-            self._cycle_bounds_cache[cycle] = bounds
             return bounds
         except (KeyError, ValueError):
             return None
@@ -303,9 +317,17 @@ class DALCalculator:
         # Calculate DAL adoption percentage
         dal_adoption = ((total_delegates - dal_inactive - unclassified - non_attesting) / total_delegates * 100) if total_delegates > 0 else 0
 
+        # Get the actual cycle timestamp from TzKT API
+        cycle_info = self.get_cycle_info(cycle)
+        if cycle_info and 'startTime' in cycle_info:
+            cycle_timestamp = datetime.fromisoformat(cycle_info['startTime'].replace('Z', '+00:00'))
+        else:
+            cycle_timestamp = datetime.now()
+            logger.warning(f"Could not get cycle {cycle} start time, using current time")
+
         stats = DALStats(
             cycle=cycle,
-            timestamp=datetime.now(),
+            timestamp=cycle_timestamp,
             total_bakers=total_delegates,
             dal_active_bakers=dal_active,
             dal_inactive_bakers=dal_inactive,
