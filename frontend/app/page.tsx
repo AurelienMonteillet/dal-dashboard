@@ -170,7 +170,8 @@ export default function Home() {
       }
       const data = await response.json();
       setDebug(debug + "\nData loaded: " + JSON.stringify(data).substring(0, 100) + "...");
-      setHistory(data);
+      // Sort history by cycle descending (most recent first)
+      setHistory(data.sort((a: HistoryEntry, b: HistoryEntry) => b.cycle - a.cycle));
     } catch (err) {
       setDebug(debug + "\nError: " + (err instanceof Error ? err.message : String(err)));
     }
@@ -193,7 +194,8 @@ export default function Home() {
         console.log("History loaded, length:", dataHistory?.length, "data:", dataHistory);
 
         setStats(dataStats);
-        setHistory(dataHistory);
+        // Sort history by cycle descending (most recent first)
+        setHistory(dataHistory.sort((a, b) => b.cycle - a.cycle));
         setError(null);
       } catch (err) {
         console.error('Error loading DAL stats:', err);
