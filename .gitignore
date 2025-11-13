@@ -68,4 +68,5 @@ coverage/
 
 # Misc
 .DS_Store
-Thumbs.db backend/logs/
+Thumbs.db
+backend/logs/
