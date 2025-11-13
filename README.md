@@ -1,26 +1,23 @@
-# Tezos DAL-o-meter Dashboard
+# Tezos DAL-O-Meter Dashboard
 
-This dashboard allows real-time visualization of the adoption statistics of the DAL (Data Availability Layer) protocol on the Tezos network.
+Real-time visualization of DAL (Data Availability Layer) adoption statistics on the Tezos network.
 
-## Metrics Explained
+🌐 **Live Dashboard**: [https://aurelienmonteillet.github.io/dal-dashboard/](https://aurelienmonteillet.github.io/dal-dashboard/)
 
-The dashboard displays four key metrics to measure DAL adoption:
+## 🎯 Detection Method
 
-### DAL Active Bakers
-Shows the number and percentage of active bakers that have enabled the DAL protocol. 
-Example: `63/295` means 63 out of 295 total bakers have activated DAL.
+The dashboard uses the Tezos RPC endpoint **`dal_participation`** to detect bakers with DAL activated.
 
-### Baking Power
-Represents the percentage of total Tezos staking power controlled by bakers who have activated DAL. 
+**Detection Criteria**: A baker is considered DAL-active if `delegate_attested_dal_slots > 0` at the cycle's last level.
 
-### DAL Participation
-Calculated as: `(dal_active_bakers / (total_bakers - non_attesting_bakers)) * 100`
-This measures the participation rate among active bakers who are making attestations.
-It provides a more accurate view of participation by excluding inactive bakers.
+This method measures actual DAL slot attestation, ensuring only functional DAL nodes are counted.
 
-### DAL Adoption
-Calculated as: `((total_bakers - dal_inactive_bakers - unclassified_bakers - non_attesting_bakers) / total_bakers) * 100`
-This represents the overall adoption rate of DAL among all bakers on the Tezos network.
+## 📊 Metrics
+
+- **DAL Active Bakers**: Number and percentage of bakers actively using DAL
+- **Baking Power**: Percentage of total baking power from DAL-active bakers (~82%)
+- **DAL Participation**: Participation rate among attesting bakers
+- **DAL Adoption**: Overall DAL adoption rate across all bakers
 
 ## Project Structure
 
@@ -46,18 +43,11 @@ The project has been optimized with a clean separation of concerns:
 
 ## How It Works
 
-1. **Data Collection**: 
-   - The `dal_calculation.py` script collects data from Tezos blockchain using TzKT API
-   - It analyzes baker participation in the DAL protocol
-   - Results are stored in JSON files in the `backend/data/` directory
+1. **Data Collection**: The `dal_calculation.py` script queries TzKT API and `dal_participation` RPC endpoint to determine each baker's DAL status
+2. **Data Presentation**: Next.js frontend displays statistics with gauge charts and history tables
+3. **Automation**: Cron job runs hourly to update statistics automatically
 
-2. **Data Presentation**:
-   - The Next.js frontend reads data using symbolic links in the `public/` folder
-   - It displays statistics using gauge charts and tables
-
-3. **Automation**:
-   - A cron job runs every 2 days to update the statistics
-   - The `update_dal_stats.sh` script handles running the calculation and Git commits
+See `backend/scripts/README.md` for detailed technical documentation.
 
 ## Setup Instructions
 
@@ -179,6 +169,12 @@ cd /opt/dal_dashboard
 
 ## Logs
 
-All logs are stored in the `/opt/dal_dashboard/logs/` directory:
+Logs are stored in `/opt/dal_dashboard/logs/` and `backend/logs/`:
 - `dal_update.log` - Update script logs
 - `dal_stats.log` - Calculation script logs
+
+## Documentation
+
+- **Backend**: `backend/scripts/README.md` - Detailed technical documentation
+- **Frontend**: `frontend/README.md` - Next.js documentation
+- **APIs**: [TzKT API](https://api.tzkt.io/) | [Tezos RPC](https://tezos.gitlab.io/active/rpc.html)

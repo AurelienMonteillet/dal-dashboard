@@ -180,7 +180,8 @@ class DALCalculator:
 
     def check_dal_activation(self, delegate: Dict, cycle: int) -> Optional[bool]:
         """
-        Check if a delegate has activated DAL using the dal_participation RPC endpoint.
+        Check if a delegate has DAL activated using the dal_participation RPC endpoint.
+        This method checks if the delegate has actually attested DAL slots.
         
         Args:
             delegate: Delegate information
