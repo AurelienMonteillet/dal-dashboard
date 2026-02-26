@@ -70,3 +70,7 @@ coverage/
 .DS_Store
 Thumbs.db
 backend/logs/
+
+# Claude
+.claude/
+CLAUDE.md
