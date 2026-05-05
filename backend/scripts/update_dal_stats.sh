@@ -42,6 +42,18 @@ exec > >(tee -a logs/dal_update.log) 2>&1
 
 echo "===== Starting DAL stats update: $(date) ====="
 
+# Bail out early if /opt is critically low on space. Mar 2026: a full disk
+# left tmp_obj_* files in .git/objects and broke `git fetch` silently for
+# 6 weeks. Better to skip a cycle than corrupt the repo.
+AVAIL_KB=$(df --output=avail /opt/dal_dashboard 2>/dev/null | tail -1)
+if [ -n "$AVAIL_KB" ] && [ "$AVAIL_KB" -lt 524288 ]; then
+    echo "ABORT: only ${AVAIL_KB}KB free on /opt, refusing to run"
+    exit 1
+fi
+
+# Sweep stale tmp objects from any prior crashed fetch
+find .git/objects -name "tmp_obj_*" -mmin +60 -delete 2>/dev/null
+
 # Activate virtual environment
 source venv/bin/activate
 
