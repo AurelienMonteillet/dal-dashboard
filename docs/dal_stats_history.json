@@ -8,6 +8,278 @@
     "dal_adoption_percentage": 87.1244635193133
   },
   {
+    "timestamp": "2026-05-03T05:34:37+00:00",
+    "cycle": 1221,
+    "dal_active_bakers": 202,
+    "dal_baking_power_percentage": 89.09885192629898,
+    "dal_participation_percentage": 86.69527896995707,
+    "dal_adoption_percentage": 86.69527896995707
+  },
+  {
+    "timestamp": "2026-05-02T05:23:10+00:00",
+    "cycle": 1220,
+    "dal_active_bakers": 203,
+    "dal_baking_power_percentage": 89.07193650920921,
+    "dal_participation_percentage": 87.5,
+    "dal_adoption_percentage": 87.1244635193133
+  },
+  {
+    "timestamp": "2026-05-01T05:12:31+00:00",
+    "cycle": 1219,
+    "dal_active_bakers": 204,
+    "dal_baking_power_percentage": 89.00405726678943,
+    "dal_participation_percentage": 87.93103448275862,
+    "dal_adoption_percentage": 87.55364806866953
+  },
+  {
+    "timestamp": "2026-04-30T04:42:22+00:00",
+    "cycle": 1218,
+    "dal_active_bakers": 202,
+    "dal_baking_power_percentage": 88.99673542181891,
+    "dal_participation_percentage": 87.06896551724138,
+    "dal_adoption_percentage": 86.69527896995707
+  },
+  {
+    "timestamp": "2026-04-29T04:31:52+00:00",
+    "cycle": 1217,
+    "dal_active_bakers": 202,
+    "dal_baking_power_percentage": 88.98419165665798,
+    "dal_participation_percentage": 87.06896551724138,
+    "dal_adoption_percentage": 86.69527896995707
+  },
+  {
+    "timestamp": "2026-04-28T04:12:34+00:00",
+    "cycle": 1216,
+    "dal_active_bakers": 200,
+    "dal_baking_power_percentage": 88.9515488949789,
+    "dal_participation_percentage": 86.20689655172413,
+    "dal_adoption_percentage": 85.83690987124464
+  },
+  {
+    "timestamp": "2026-04-27T03:56:46+00:00",
+    "cycle": 1215,
+    "dal_active_bakers": 201,
+    "dal_baking_power_percentage": 88.98982771145889,
+    "dal_participation_percentage": 86.63793103448276,
+    "dal_adoption_percentage": 86.26609442060087
+  },
+  {
+    "timestamp": "2026-04-26T03:37:49+00:00",
+    "cycle": 1214,
+    "dal_active_bakers": 202,
+    "dal_baking_power_percentage": 88.93607064152289,
+    "dal_participation_percentage": 87.06896551724138,
+    "dal_adoption_percentage": 86.69527896995707
+  },
+  {
+    "timestamp": "2026-04-25T03:16:43+00:00",
+    "cycle": 1213,
+    "dal_active_bakers": 203,
+    "dal_baking_power_percentage": 89.00364576113351,
+    "dal_participation_percentage": 87.5,
+    "dal_adoption_percentage": 87.1244635193133
+  },
+  {
+    "timestamp": "2026-04-24T03:11:46+00:00",
+    "cycle": 1212,
+    "dal_active_bakers": 201,
+    "dal_baking_power_percentage": 88.95707106197321,
+    "dal_participation_percentage": 86.63793103448276,
+    "dal_adoption_percentage": 86.26609442060087
+  },
+  {
+    "timestamp": "2026-04-23T03:03:16+00:00",
+    "cycle": 1211,
+    "dal_active_bakers": 195,
+    "dal_baking_power_percentage": 87.18997681373313,
+    "dal_participation_percentage": 84.05172413793103,
+    "dal_adoption_percentage": 83.69098712446352
+  },
+  {
+    "timestamp": "2026-04-22T02:55:37+00:00",
+    "cycle": 1210,
+    "dal_active_bakers": 194,
+    "dal_baking_power_percentage": 87.39071851655741,
+    "dal_participation_percentage": 83.62068965517241,
+    "dal_adoption_percentage": 83.2618025751073
+  },
+  {
+    "timestamp": "2026-04-21T02:48:49+00:00",
+    "cycle": 1209,
+    "dal_active_bakers": 198,
+    "dal_baking_power_percentage": 88.96895251137448,
+    "dal_participation_percentage": 85.34482758620689,
+    "dal_adoption_percentage": 84.97854077253218
+  },
+  {
+    "timestamp": "2026-04-20T02:14:55+00:00",
+    "cycle": 1208,
+    "dal_active_bakers": 193,
+    "dal_baking_power_percentage": 87.99353169099686,
+    "dal_participation_percentage": 83.1896551724138,
+    "dal_adoption_percentage": 82.83261802575107
+  },
+  {
+    "timestamp": "2026-04-19T01:31:40+00:00",
+    "cycle": 1207,
+    "dal_active_bakers": 194,
+    "dal_baking_power_percentage": 87.76252105638245,
+    "dal_participation_percentage": 83.62068965517241,
+    "dal_adoption_percentage": 83.2618025751073
+  },
+  {
+    "timestamp": "2026-04-18T00:48:52+00:00",
+    "cycle": 1206,
+    "dal_active_bakers": 195,
+    "dal_baking_power_percentage": 87.81102569947382,
+    "dal_participation_percentage": 84.05172413793103,
+    "dal_adoption_percentage": 83.69098712446352
+  },
+  {
+    "timestamp": "2026-04-16T23:13:19+00:00",
+    "cycle": 1205,
+    "dal_active_bakers": 194,
+    "dal_baking_power_percentage": 88.51384814856605,
+    "dal_participation_percentage": 83.62068965517241,
+    "dal_adoption_percentage": 83.2618025751073
+  },
+  {
+    "timestamp": "2026-04-15T20:41:04+00:00",
+    "cycle": 1204,
+    "dal_active_bakers": 194,
+    "dal_baking_power_percentage": 88.52466979286243,
+    "dal_participation_percentage": 83.62068965517241,
+    "dal_adoption_percentage": 83.2618025751073
+  },
+  {
+    "timestamp": "2026-04-14T20:31:55+00:00",
+    "cycle": 1203,
+    "dal_active_bakers": 194,
+    "dal_baking_power_percentage": 88.54975216125392,
+    "dal_participation_percentage": 83.62068965517241,
+    "dal_adoption_percentage": 83.2618025751073
+  },
+  {
+    "timestamp": "2026-04-13T20:13:16+00:00",
+    "cycle": 1202,
+    "dal_active_bakers": 194,
+    "dal_baking_power_percentage": 88.64382841697544,
+    "dal_participation_percentage": 83.62068965517241,
+    "dal_adoption_percentage": 83.2618025751073
+  },
+  {
+    "timestamp": "2026-04-12T19:44:22+00:00",
+    "cycle": 1201,
+    "dal_active_bakers": 197,
+    "dal_baking_power_percentage": 88.652301487628,
+    "dal_participation_percentage": 84.91379310344827,
+    "dal_adoption_percentage": 84.54935622317596
+  },
+  {
+    "timestamp": "2026-04-11T19:18:19+00:00",
+    "cycle": 1200,
+    "dal_active_bakers": 196,
+    "dal_baking_power_percentage": 88.71844896848748,
+    "dal_participation_percentage": 84.48275862068965,
+    "dal_adoption_percentage": 84.12017167381974
+  },
+  {
+    "timestamp": "2026-04-10T19:09:10+00:00",
+    "cycle": 1199,
+    "dal_active_bakers": 196,
+    "dal_baking_power_percentage": 88.7458268525475,
+    "dal_participation_percentage": 84.48275862068965,
+    "dal_adoption_percentage": 84.12017167381974
+  },
+  {
+    "timestamp": "2026-04-09T18:57:58+00:00",
+    "cycle": 1198,
+    "dal_active_bakers": 199,
+    "dal_baking_power_percentage": 88.81687774356156,
+    "dal_participation_percentage": 85.77586206896551,
+    "dal_adoption_percentage": 85.40772532188842
+  },
+  {
+    "timestamp": "2026-04-08T18:06:07+00:00",
+    "cycle": 1197,
+    "dal_active_bakers": 199,
+    "dal_baking_power_percentage": 88.81026452570936,
+    "dal_participation_percentage": 85.77586206896551,
+    "dal_adoption_percentage": 85.40772532188842
+  },
+  {
+    "timestamp": "2026-04-07T16:26:13+00:00",
+    "cycle": 1196,
+    "dal_active_bakers": 198,
+    "dal_baking_power_percentage": 85.5809298268891,
+    "dal_participation_percentage": 85.34482758620689,
+    "dal_adoption_percentage": 84.97854077253218
+  },
+  {
+    "timestamp": "2026-04-06T15:20:10+00:00",
+    "cycle": 1195,
+    "dal_active_bakers": 199,
+    "dal_baking_power_percentage": 87.68892818433412,
+    "dal_participation_percentage": 85.77586206896551,
+    "dal_adoption_percentage": 85.40772532188842
+  },
+  {
+    "timestamp": "2026-04-05T15:07:22+00:00",
+    "cycle": 1194,
+    "dal_active_bakers": 196,
+    "dal_baking_power_percentage": 86.90170715373709,
+    "dal_participation_percentage": 84.48275862068965,
+    "dal_adoption_percentage": 84.12017167381974
+  },
+  {
+    "timestamp": "2026-04-04T14:56:16+00:00",
+    "cycle": 1193,
+    "dal_active_bakers": 197,
+    "dal_baking_power_percentage": 88.14297837079916,
+    "dal_participation_percentage": 84.91379310344827,
+    "dal_adoption_percentage": 84.54935622317596
+  },
+  {
+    "timestamp": "2026-04-03T14:43:52+00:00",
+    "cycle": 1192,
+    "dal_active_bakers": 199,
+    "dal_baking_power_percentage": 88.18310323852127,
+    "dal_participation_percentage": 85.77586206896551,
+    "dal_adoption_percentage": 85.40772532188842
+  },
+  {
+    "timestamp": "2026-04-02T14:30:07+00:00",
+    "cycle": 1191,
+    "dal_active_bakers": 198,
+    "dal_baking_power_percentage": 88.19056750396878,
+    "dal_participation_percentage": 85.34482758620689,
+    "dal_adoption_percentage": 84.97854077253218
+  },
+  {
+    "timestamp": "2026-04-01T13:33:52+00:00",
+    "cycle": 1190,
+    "dal_active_bakers": 198,
+    "dal_baking_power_percentage": 87.8887944018623,
+    "dal_participation_percentage": 85.34482758620689,
+    "dal_adoption_percentage": 84.97854077253218
+  },
+  {
+    "timestamp": "2026-03-31T13:29:49+00:00",
+    "cycle": 1189,
+    "dal_active_bakers": 198,
+    "dal_baking_power_percentage": 87.88659343376541,
+    "dal_participation_percentage": 85.34482758620689,
+    "dal_adoption_percentage": 84.97854077253218
+  },
+  {
+    "timestamp": "2026-03-30T13:21:34+00:00",
+    "cycle": 1188,
+    "dal_active_bakers": 198,
+    "dal_baking_power_percentage": 88.20151855648109,
+    "dal_participation_percentage": 85.34482758620689,
+    "dal_adoption_percentage": 84.97854077253218
+  },
+  {
     "timestamp": "2026-03-29T13:12:58+00:00",
     "cycle": 1187,
     "dal_active_bakers": 199,
